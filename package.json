@@ -1,0 +1,29 @@
+{
+  "name": "vanguard-system",
+  "version": "1.0.0",
+  "description": "Global Anti-Counterfeiting System with NFC and Blockchain Integration",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "cd server && npm run dev",
+    "client:dev": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "test": "npm run test:server && npm run test:client",
+    "test:server": "cd server && npm test",
+    "test:client": "cd client && npm test",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "keywords": [
+    "nfc",
+    "blockchain",
+    "anti-counterfeiting",
+    "supply-chain",
+    "authentication"
+  ],
+  "author": "Vanguard Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
