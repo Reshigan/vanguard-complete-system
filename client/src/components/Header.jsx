@@ -11,11 +11,11 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-vanguard-700 p-2 rounded-lg">
+            <div className="bg-authentiguard-700 p-2 rounded-lg">
               <Shield className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-vanguard-900">Vanguard</h1>
+              <h1 className="text-xl font-bold text-authentiguard-900">AuthentiGuard</h1>
               <p className="text-xs text-gray-500 -mt-1">Product Authentication</p>
             </div>
           </Link>
@@ -47,7 +47,7 @@ const Header = () => {
               <div className="flex items-center space-x-2">
                 <Link
                   to="/login"
-                  className="text-sm font-medium text-vanguard-700 hover:text-vanguard-800"
+                  className="text-sm font-medium text-authentiguard-700 hover:text-authentiguard-800"
                 >
                   Sign In
                 </Link>

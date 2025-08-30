@@ -1,7 +1,7 @@
 {
-  "name": "vanguard-server",
+  "name": "authentiguard-server",
   "version": "1.0.0",
-  "description": "Vanguard Backend API Server",
+  "description": "AuthentiGuard Backend API Server",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -11,27 +11,29 @@
     "seed": "knex seed:run"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "helmet": "^7.0.0",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
-    "pg": "^8.11.3",
-    "knex": "^2.5.1",
-    "redis": "^4.6.8",
-    "multer": "^1.4.5-lts.1",
+    "cors": "^2.8.5",
     "crypto": "^1.0.1",
-    "web3": "^4.1.1",
-    "node-cron": "^3.0.2",
-    "winston": "^3.10.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.0.1",
+    "helmet": "^7.0.0",
     "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^2.5.1",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.2",
+    "pg": "^8.11.3",
     "rate-limiter-flexible": "^2.4.2",
+    "redis": "^4.6.8",
+    "sqlite3": "^5.1.7",
     "uuid": "^9.0.0",
-    "dotenv": "^16.3.1"
+    "web3": "^4.1.1",
+    "winston": "^3.10.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1",
     "jest": "^29.6.2",
+    "nodemon": "^3.0.1",
     "supertest": "^6.3.3"
   }
 }

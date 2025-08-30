@@ -1,6 +1,7 @@
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../config/database');
+const db = require('../config/mockDatabase');
 const { logger } = require('../utils/logger');
 const { v4: uuidv4 } = require('uuid');
 

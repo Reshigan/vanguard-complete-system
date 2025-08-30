@@ -63,17 +63,17 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-vanguard-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="bg-authentiguard-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
           <Shield className="h-8 w-8 text-white" />
         </div>
         <h2 className="text-center text-3xl font-bold text-gray-900">
-          Sign in to Vanguard
+          Sign in to AuthentiGuard
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Or{' '}
           <Link
             to="/register"
-            className="font-medium text-vanguard-600 hover:text-vanguard-500"
+            className="font-medium text-authentiguard-600 hover:text-authentiguard-500"
           >
             create a new account
           </Link>

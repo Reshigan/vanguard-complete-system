@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const db = require('../config/database');
+const db = require('../config/mockDatabase');
 const { logger } = require('../utils/logger');
 
 const authenticate = async (req, res, next) => {

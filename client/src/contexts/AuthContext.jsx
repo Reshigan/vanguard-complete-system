@@ -21,7 +21,15 @@ export const AuthProvider = ({ children }) => {
       try {
         const token = localStorage.getItem('accessToken')
         if (token) {
-          const userData = await authService.getProfile()
+          // Add timeout to prevent hanging
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Auth timeout')), 5000)
+          )
+          
+          const userData = await Promise.race([
+            authService.getProfile(),
+            timeoutPromise
+          ])
           setUser(userData)
         }
       } catch (error) {

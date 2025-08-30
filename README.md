@@ -1,6 +1,14 @@
-# Vanguard Anti-Counterfeiting System
+# AuthentiGuard Anti-Counterfeiting System
 
 A comprehensive NFC-based anti-counterfeiting system with blockchain integration, designed to protect consumers and brands from counterfeit products globally.
+
+## 🎯 System Overview
+
+AuthentiGuard is a cutting-edge anti-counterfeiting system designed for global manufacturers and industry associations. It provides a robust, multi-layered defense against counterfeit products while building trust and direct relationships with consumers.
+
+### 🛡️ Brand Identity
+
+**AuthentiGuard** represents a commitment to being on the front lines of quality and authenticity. It suggests protection and a forward-thinking approach to safeguarding both the producer and the consumer.
 
 ## 🚀 Quick Start
 

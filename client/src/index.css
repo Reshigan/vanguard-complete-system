@@ -26,7 +26,7 @@
   }
 
   .btn-primary {
-    @apply btn bg-vanguard-700 text-white hover:bg-vanguard-800 focus:ring-vanguard-500;
+    @apply btn bg-authentiguard-700 text-white hover:bg-authentiguard-800 focus:ring-authentiguard-500;
   }
 
   .btn-secondary {
@@ -50,7 +50,7 @@
   }
 
   .input {
-    @apply block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-vanguard-500 focus:border-vanguard-500;
+    @apply block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-authentiguard-500 focus:border-authentiguard-500;
   }
 
   .card {

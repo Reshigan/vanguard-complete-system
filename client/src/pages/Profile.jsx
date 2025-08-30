@@ -93,8 +93,8 @@ const Profile = () => {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
-        <div className="bg-vanguard-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-          <User className="h-10 w-10 text-vanguard-600" />
+        <div className="bg-authentiguard-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <User className="h-10 w-10 text-authentiguard-600" />
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">{user?.profile?.name || 'User Profile'}</h1>
         <span className={`${getRoleBadgeColor(user?.role)} text-sm`}>
@@ -287,7 +287,7 @@ const Profile = () => {
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" className="sr-only peer" defaultChecked />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-vanguard-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-vanguard-600"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-authentiguard-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-authentiguard-600"></div>
             </label>
           </div>
 
@@ -298,7 +298,7 @@ const Profile = () => {
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" className="sr-only peer" />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-vanguard-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-vanguard-600"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-authentiguard-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-authentiguard-600"></div>
             </label>
           </div>
 

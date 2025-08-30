@@ -10,7 +10,7 @@ router.get('/track/:tokenId', supplyChainController.trackToken);
 router.use(authenticate);
 
 router.post('/events', supplyChainController.addEvent);
-router.get('/analytics', authorize('manufacturer', 'distributor'), supplyChainController.getAnalytics);
+router.get('/analytics/:manufacturerId', authorize('manufacturer', 'distributor'), supplyChainController.getAnalytics);
 router.get('/events/:tokenId', supplyChainController.getTokenEvents);
 
 module.exports = router;

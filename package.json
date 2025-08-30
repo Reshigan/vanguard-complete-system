@@ -1,5 +1,5 @@
 {
-  "name": "vanguard-system",
+  "name": "authentiguard-system",
   "version": "1.0.0",
   "description": "Global Anti-Counterfeiting System with NFC and Blockchain Integration",
   "main": "server/index.js",

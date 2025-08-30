@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const db = require('../config/mockDatabase');
 const crypto = require('crypto');
 const { logger } = require('../utils/logger');
 const blockchainService = require('../services/blockchainService');

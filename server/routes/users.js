@@ -7,11 +7,7 @@ router.use(authenticate);
 
 router.get('/profile', userController.getProfile);
 router.put('/profile', userController.updateProfile);
-router.get('/consumption-tracker', userController.getConsumptionTracker);
-router.post('/consumption-tracker', userController.addConsumptionEntry);
-
-// Admin routes
-router.get('/all', authorize('admin'), userController.getAllUsers);
-router.put('/:id/role', authorize('admin'), userController.updateUserRole);
+router.get('/stats', userController.getStats);
+router.delete('/account', userController.deleteAccount);
 
 module.exports = router;

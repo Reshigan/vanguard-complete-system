@@ -10,7 +10,7 @@ const Rewards = () => {
       id: '1',
       type: 'counterfeit_report',
       amount: 100,
-      description: 'Confirmed counterfeit report - Vanguard Reserve',
+      description: 'Confirmed counterfeit report - AuthentiGuard Reserve',
       date: '2024-08-25',
       status: 'completed'
     },
@@ -75,8 +75,8 @@ const Rewards = () => {
     },
     {
       id: '4',
-      title: 'Vanguard T-Shirt',
-      description: 'Official Vanguard merchandise',
+      title: 'AuthentiGuard T-Shirt',
+      description: 'Official AuthentiGuard merchandise',
       points: 150,
       category: 'merchandise',
       image: '👕'
@@ -129,7 +129,7 @@ const Rewards = () => {
     {
       id: '4',
       title: 'Community Leader',
-      description: 'Referred 10 friends to Vanguard',
+      description: 'Referred 10 friends to AuthentiGuard',
       icon: TrendingUp,
       earned: false,
       progress: 3,
@@ -168,7 +168,7 @@ const Rewards = () => {
 
       {/* Current Balance */}
       <div className="card mb-8 text-center">
-        <div className="text-4xl font-bold text-vanguard-700 mb-2">{currentBalance}</div>
+        <div className="text-4xl font-bold text-authentiguard-700 mb-2">{currentBalance}</div>
         <div className="text-gray-600">Available Points</div>
         <div className="mt-4 flex justify-center space-x-6 text-sm text-gray-500">
           <div>
@@ -193,7 +193,7 @@ const Rewards = () => {
                 <h3 className="font-semibold text-gray-900 mb-2">{reward.title}</h3>
                 <p className="text-sm text-gray-600 mb-4">{reward.description}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-vanguard-700">
+                  <span className="text-lg font-bold text-authentiguard-700">
                     {reward.points} pts
                   </span>
                   <button
@@ -245,7 +245,7 @@ const Rewards = () => {
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className="bg-vanguard-600 h-2 rounded-full"
+                            className="bg-authentiguard-600 h-2 rounded-full"
                             style={{ width: `${(achievement.progress / achievement.total) * 100}%` }}
                           ></div>
                         </div>
@@ -304,7 +304,7 @@ const Rewards = () => {
             <span className="font-medium">50-100 pts</span>
           </div>
           <div className="flex justify-between">
-            <span>• Refer friends to Vanguard</span>
+            <span>• Refer friends to AuthentiGuard</span>
             <span className="font-medium">50 pts</span>
           </div>
           <div className="flex justify-between">

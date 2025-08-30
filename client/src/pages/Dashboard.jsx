@@ -35,7 +35,7 @@ const Dashboard = () => {
         {
           id: '1',
           tokenHash: 'a1b2c3d4e5f6g7h8',
-          productName: 'Vanguard Reserve',
+          productName: 'AuthentiGuard Reserve',
           location: 'New York, NY',
           status: 'confirmed',
           reportedAt: '2024-08-25T10:30:00Z',
@@ -64,7 +64,7 @@ const Dashboard = () => {
         {
           id: '1',
           tokenHash: 'd4e5f6g7h8i9j0k1',
-          productName: 'Vanguard Reserve',
+          productName: 'AuthentiGuard Reserve',
           location: 'Boston, MA',
           validatedAt: '2024-08-25T14:20:00Z',
           user: 'sarah.johnson@gmail.com'
@@ -307,7 +307,7 @@ const Dashboard = () => {
                     Token: {report.tokenHash}...
                   </p>
                 </div>
-                <button className="text-vanguard-600 hover:text-vanguard-800 text-sm font-medium">
+                <button className="text-authentiguard-600 hover:text-authentiguard-800 text-sm font-medium">
                   <Eye className="h-4 w-4" />
                 </button>
               </div>

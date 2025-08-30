@@ -13,8 +13,8 @@ const Reports = () => {
       {
         id: '1',
         tokenHash: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
-        productName: 'Vanguard Reserve',
-        manufacturer: 'Vanguard Distillery',
+        productName: 'AuthentiGuard Reserve',
+        manufacturer: 'AuthentiGuard Distillery',
         status: 'confirmed',
         rewardAmount: 100,
         location: 'New York, NY',
@@ -126,7 +126,7 @@ const Reports = () => {
             onClick={() => setFilter(tab.key)}
             className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
               filter === tab.key
-                ? 'bg-white text-vanguard-700 shadow-sm'
+                ? 'bg-white text-authentiguard-700 shadow-sm'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -187,7 +187,7 @@ const Reports = () => {
                     </div>
                   </div>
                   
-                  <button className="text-vanguard-600 hover:text-vanguard-800 font-medium">
+                  <button className="text-authentiguard-600 hover:text-authentiguard-800 font-medium">
                     View Details
                   </button>
                 </div>

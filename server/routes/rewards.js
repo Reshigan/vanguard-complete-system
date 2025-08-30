@@ -5,9 +5,8 @@ const rewardsController = require('../controllers/rewardsController');
 
 router.use(authenticate);
 
-router.get('/balance', rewardsController.getBalance);
-router.get('/history', rewardsController.getHistory);
-router.post('/redeem', rewardsController.redeemRewards);
-router.get('/available', rewardsController.getAvailableRewards);
+router.get('/', rewardsController.getUserRewards);
+router.post('/redeem', rewardsController.redeemReward);
+router.get('/leaderboard', rewardsController.getLeaderboard);
 
 module.exports = router;
