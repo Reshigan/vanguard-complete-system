@@ -11,6 +11,8 @@ const supplyChainRoutes = require('./routes/supplyChain');
 const rewardsRoutes = require('./routes/rewards');
 const dashboardRoutes = require('./routes/dashboard');
 const userRoutes = require('./routes/users');
+const analyticsRoutes = require('./routes/analytics');
+const enhancedRewardsRoutes = require('./routes/enhancedRewards');
 
 const { errorHandler } = require('./middleware/errorHandler');
 const { logger } = require('./utils/logger');
@@ -73,6 +75,8 @@ app.use('/api/supply-chain', supplyChainRoutes);
 app.use('/api/rewards', rewardsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/rewards/v2', enhancedRewardsRoutes);
 
 // Serve static files
 app.use('/uploads', express.static('uploads'));
