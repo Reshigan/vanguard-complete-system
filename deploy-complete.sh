@@ -363,18 +363,27 @@ EOF
     
     # Start and enable Redis
     # Try different service names
-    if systemctl list-unit-files | grep -q "^redis.service"; then
-        sudo systemctl enable redis
-        sudo systemctl restart redis
-    elif systemctl list-unit-files | grep -q "^redis-server.service"; then
-        sudo systemctl enable redis-server
-        sudo systemctl restart redis-server
+    REDIS_SERVICE=""
+    if systemctl list-unit-files | grep -q "^redis-server.service"; then
+        REDIS_SERVICE="redis-server"
+    elif systemctl list-unit-files | grep -q "^redis.service"; then
+        # Check if it's not an alias
+        if ! systemctl show -p FragmentPath redis.service | grep -q "Alias"; then
+            REDIS_SERVICE="redis"
+        fi
     elif systemctl list-unit-files | grep -q "^redis6.service"; then
-        sudo systemctl enable redis6
-        sudo systemctl restart redis6
+        REDIS_SERVICE="redis6"
+    fi
+    
+    if [ -n "$REDIS_SERVICE" ]; then
+        print_info "Using Redis service: $REDIS_SERVICE"
+        sudo systemctl enable $REDIS_SERVICE
+        sudo systemctl restart $REDIS_SERVICE
     else
         print_warning "Redis service not found in systemd, trying to start manually..."
-        sudo redis-server $REDIS_CONF --daemonize yes
+        # Ensure daemonize is set correctly for manual start
+        sudo sed -i "s/^daemonize no/daemonize yes/" $REDIS_CONF 2>/dev/null || true
+        sudo redis-server $REDIS_CONF
     fi
     
     # Verify Redis is running
