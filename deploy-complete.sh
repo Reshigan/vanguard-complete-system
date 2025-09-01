@@ -278,25 +278,112 @@ EOF
 setup_redis() {
     print_status "Setting up Redis cache..."
     
+    # Find Redis configuration file
+    REDIS_CONF=""
+    if [ -f "/etc/redis/redis.conf" ]; then
+        REDIS_CONF="/etc/redis/redis.conf"
+    elif [ -f "/etc/redis.conf" ]; then
+        REDIS_CONF="/etc/redis.conf"
+    elif [ -f "/etc/redis/6379.conf" ]; then
+        REDIS_CONF="/etc/redis/6379.conf"
+    elif [ -f "/usr/local/etc/redis.conf" ]; then
+        REDIS_CONF="/usr/local/etc/redis.conf"
+    else
+        print_error "Redis configuration file not found!"
+        print_info "Searching for redis.conf..."
+        REDIS_CONF=$(sudo find /etc -name "redis.conf" 2>/dev/null | head -1)
+        if [ -z "$REDIS_CONF" ]; then
+            print_error "Cannot locate redis.conf. Creating default configuration..."
+            REDIS_CONF="/etc/redis/redis.conf"
+            sudo mkdir -p /etc/redis
+            sudo cp /etc/redis.conf.default $REDIS_CONF 2>/dev/null || \
+            sudo cp /usr/share/doc/redis*/redis.conf $REDIS_CONF 2>/dev/null || \
+            sudo touch $REDIS_CONF
+        fi
+    fi
+    
+    print_info "Using Redis config: $REDIS_CONF"
+    
     # Configure Redis password
-    REDIS_CONF="/etc/redis/redis.conf"
-    [ ! -f "$REDIS_CONF" ] && REDIS_CONF="/etc/redis.conf"
+    if [ -f "$REDIS_CONF" ]; then
+        # Backup original config
+        sudo cp $REDIS_CONF ${REDIS_CONF}.backup
+        
+        # Set password
+        if grep -q "^requirepass" $REDIS_CONF; then
+            sudo sed -i "s/^requirepass .*/requirepass $REDIS_PASSWORD/" $REDIS_CONF
+        elif grep -q "# requirepass foobared" $REDIS_CONF; then
+            sudo sed -i "s/# requirepass foobared/requirepass $REDIS_PASSWORD/" $REDIS_CONF
+        else
+            echo "requirepass $REDIS_PASSWORD" | sudo tee -a $REDIS_CONF
+        fi
+        
+        # Set memory limit
+        if grep -q "^maxmemory" $REDIS_CONF; then
+            sudo sed -i "s/^maxmemory .*/maxmemory 512mb/" $REDIS_CONF
+        else
+            echo "maxmemory 512mb" | sudo tee -a $REDIS_CONF
+        fi
+        
+        # Set eviction policy
+        if grep -q "^maxmemory-policy" $REDIS_CONF; then
+            sudo sed -i "s/^maxmemory-policy .*/maxmemory-policy allkeys-lru/" $REDIS_CONF
+        else
+            echo "maxmemory-policy allkeys-lru" | sudo tee -a $REDIS_CONF
+        fi
+        
+        # Enable persistence
+        if ! grep -q "^save 900 1" $REDIS_CONF; then
+            echo -e "\n# Persistence settings" | sudo tee -a $REDIS_CONF
+            echo "save 900 1" | sudo tee -a $REDIS_CONF
+            echo "save 300 10" | sudo tee -a $REDIS_CONF
+            echo "save 60 10000" | sudo tee -a $REDIS_CONF
+        fi
+    else
+        print_warning "Redis config file not found, creating minimal config..."
+        sudo mkdir -p $(dirname $REDIS_CONF)
+        cat << EOF | sudo tee $REDIS_CONF
+# Redis Configuration
+bind 127.0.0.1
+port 6379
+requirepass $REDIS_PASSWORD
+maxmemory 512mb
+maxmemory-policy allkeys-lru
+save 900 1
+save 300 10
+save 60 10000
+dir /var/lib/redis
+logfile /var/log/redis/redis.log
+EOF
+    fi
     
-    sudo sed -i "s/# requirepass foobared/requirepass $REDIS_PASSWORD/" $REDIS_CONF
-    sudo sed -i "s/# maxmemory <bytes>/maxmemory 512mb/" $REDIS_CONF
-    sudo sed -i "s/# maxmemory-policy noeviction/maxmemory-policy allkeys-lru/" $REDIS_CONF
-    
-    # Enable Redis persistence
-    sudo sed -i "s/save \"\"/# save \"\"/" $REDIS_CONF
-    echo "save 900 1" | sudo tee -a $REDIS_CONF
-    echo "save 300 10" | sudo tee -a $REDIS_CONF
-    echo "save 60 10000" | sudo tee -a $REDIS_CONF
+    # Create Redis directories
+    sudo mkdir -p /var/lib/redis /var/log/redis
+    sudo chown redis:redis /var/lib/redis /var/log/redis 2>/dev/null || true
     
     # Start and enable Redis
-    sudo systemctl enable redis || sudo systemctl enable redis-server
-    sudo systemctl restart redis || sudo systemctl restart redis-server
+    # Try different service names
+    if systemctl list-unit-files | grep -q "^redis.service"; then
+        sudo systemctl enable redis
+        sudo systemctl restart redis
+    elif systemctl list-unit-files | grep -q "^redis-server.service"; then
+        sudo systemctl enable redis-server
+        sudo systemctl restart redis-server
+    elif systemctl list-unit-files | grep -q "^redis6.service"; then
+        sudo systemctl enable redis6
+        sudo systemctl restart redis6
+    else
+        print_warning "Redis service not found in systemd, trying to start manually..."
+        sudo redis-server $REDIS_CONF --daemonize yes
+    fi
     
-    print_success "Redis configured successfully"
+    # Verify Redis is running
+    sleep 2
+    if redis-cli -a "$REDIS_PASSWORD" ping 2>/dev/null | grep -q "PONG"; then
+        print_success "Redis configured and running successfully"
+    else
+        print_warning "Redis may not be running properly. Please check manually."
+    fi
 }
 
 # Function to create directory structure

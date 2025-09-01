@@ -185,16 +185,56 @@ EOF
 setup_redis() {
     print_status "Setting up Redis..."
     
-    # Configure Redis password
-    sudo sed -i "s/# requirepass foobared/requirepass $REDIS_PASSWORD/" /etc/redis.conf || \
-    sudo sed -i "s/# requirepass foobared/requirepass $REDIS_PASSWORD/" /etc/redis/redis.conf
+    # Find Redis configuration file
+    REDIS_CONF=""
+    for conf in "/etc/redis.conf" "/etc/redis/redis.conf" "/etc/redis/6379.conf"; do
+        if [ -f "$conf" ]; then
+            REDIS_CONF="$conf"
+            break
+        fi
+    done
     
-    # Configure Redis for production
-    echo "maxmemory 512mb" | sudo tee -a /etc/redis.conf
-    echo "maxmemory-policy allkeys-lru" | sudo tee -a /etc/redis.conf
+    if [ -z "$REDIS_CONF" ]; then
+        print_warning "Redis config not found, creating one..."
+        REDIS_CONF="/etc/redis/redis.conf"
+        sudo mkdir -p /etc/redis
+    fi
+    
+    # Configure Redis
+    if [ -f "$REDIS_CONF" ]; then
+        sudo cp $REDIS_CONF ${REDIS_CONF}.backup
+        
+        # Set password
+        if grep -q "# requirepass foobared" $REDIS_CONF; then
+            sudo sed -i "s/# requirepass foobared/requirepass $REDIS_PASSWORD/" $REDIS_CONF
+        else
+            echo "requirepass $REDIS_PASSWORD" | sudo tee -a $REDIS_CONF
+        fi
+        
+        # Configure for production
+        grep -q "^maxmemory" $REDIS_CONF || echo "maxmemory 512mb" | sudo tee -a $REDIS_CONF
+        grep -q "^maxmemory-policy" $REDIS_CONF || echo "maxmemory-policy allkeys-lru" | sudo tee -a $REDIS_CONF
+    else
+        # Create minimal config
+        cat << EOF | sudo tee $REDIS_CONF
+bind 127.0.0.1
+port 6379
+requirepass $REDIS_PASSWORD
+maxmemory 512mb
+maxmemory-policy allkeys-lru
+save 900 1
+save 300 10
+save 60 10000
+dir /var/lib/redis
+EOF
+    fi
+    
+    # Create directories
+    sudo mkdir -p /var/lib/redis
+    sudo chown redis:redis /var/lib/redis 2>/dev/null || true
     
     # Restart Redis
-    sudo systemctl restart redis
+    sudo systemctl restart redis || sudo systemctl restart redis-server || sudo systemctl restart redis6
     
     print_success "Redis configured"
 }
