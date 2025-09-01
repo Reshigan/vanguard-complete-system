@@ -1,0 +1,65 @@
+# Build stage
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Install Python and build dependencies for TensorFlow.js
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    make \
+    g++ \
+    cairo-dev \
+    jpeg-dev \
+    pango-dev \
+    giflib-dev
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies including dev for building
+RUN npm ci && \
+    npm cache clean --force
+
+# Copy source code
+COPY . .
+
+# Production stage
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    dumb-init \
+    python3 \
+    py3-pip \
+    cairo \
+    jpeg \
+    pango \
+    giflib
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+# Copy node modules and source from builder
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --chown=nodejs:nodejs . .
+
+# Create ML model directory
+RUN mkdir -p services/ml/models && \
+    chown -R nodejs:nodejs services/ml/models
+
+# Switch to non-root user
+USER nodejs
+
+# Health check for worker
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+    CMD node workers/healthcheck.js || exit 1
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start the worker
+CMD ["node", "workers/index.js"]
