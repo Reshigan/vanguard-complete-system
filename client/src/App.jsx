@@ -1,67 +1,136 @@
-import { Routes, Route } from 'react-router-dom'
-import { useAuth } from './contexts/AuthContext'
-import Layout from './components/Layout'
-import Home from './pages/Home'
-import Scanner from './pages/Scanner'
-import Reports from './pages/Reports'
-import Rewards from './pages/Rewards'
-import Profile from './pages/Profile'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import ResponsibleDrinking from './pages/ResponsibleDrinking'
-import Dashboard from './pages/Dashboard'
-import ProtectedRoute from './components/ProtectedRoute'
-import LoadingSpinner from './components/LoadingSpinner'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import ThemeProvider from './components/ThemeProvider';
+import LoadingSpinner from './components/LoadingSpinner';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Original components
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import Scanner from './pages/Scanner';
+import Reports from './pages/Reports';
+import Rewards from './pages/Rewards';
+import Profile from './pages/Profile';
+import Register from './pages/Register';
+import ResponsibleDrinking from './pages/ResponsibleDrinking';
+
+// New business UI components
+import BusinessLayout from './components/business/BusinessLayout';
+import Dashboard from './components/business/Dashboard';
+
+// New consumer UI components
+import ConsumerLayout from './components/consumer/ConsumerLayout';
+import HomePage from './components/consumer/HomePage';
+import ScanPage from './components/consumer/ScanPage';
+
+// Auth components
+import Login from './components/auth/Login';
 
 function App() {
-  const { user, loading } = useAuth()
+  const { user, loading, hasRole } = useAuth();
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner size="lg" />
       </div>
-    )
+    );
   }
 
+  // Determine which UI to show based on user role
+  const isBusinessUser = user && hasRole(['manufacturer', 'distributor', 'admin']);
+
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      
-      {/* Protected routes with layout */}
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="scan" element={<Scanner />} />
-        <Route path="responsible-drinking" element={<ResponsibleDrinking />} />
+    <ThemeProvider>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         
-        {/* Authenticated routes */}
-        <Route path="reports" element={
-          <ProtectedRoute>
-            <Reports />
-          </ProtectedRoute>
-        } />
-        <Route path="rewards" element={
-          <ProtectedRoute>
-            <Rewards />
-          </ProtectedRoute>
-        } />
-        <Route path="profile" element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        } />
+        {/* Business UI routes */}
+        {isBusinessUser && (
+          <>
+            <Route path="/dashboard" element={
+              <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/analytics" element={
+              <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/products" element={
+              <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/authentication" element={
+              <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/reports" element={
+              <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+          </>
+        )}
         
-        {/* Dashboard for manufacturers/distributors */}
-        <Route path="dashboard" element={
-          <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
-            <Dashboard />
-          </ProtectedRoute>
-        } />
-      </Route>
-    </Routes>
-  )
+        {/* Consumer UI routes */}
+        {user && !isBusinessUser && (
+          <>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/scan" element={<ScanPage />} />
+            <Route path="/rewards" element={<HomePage />} />
+            <Route path="/history" element={<HomePage />} />
+            <Route path="/report" element={<HomePage />} />
+            <Route path="/profile" element={<HomePage />} />
+          </>
+        )}
+        
+        {/* Original routes with layout */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="scan" element={<Scanner />} />
+          <Route path="responsible-drinking" element={<ResponsibleDrinking />} />
+          
+          {/* Authenticated routes */}
+          <Route path="reports" element={
+            <ProtectedRoute>
+              <Reports />
+            </ProtectedRoute>
+          } />
+          <Route path="rewards" element={
+            <ProtectedRoute>
+              <Rewards />
+            </ProtectedRoute>
+          } />
+          <Route path="profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
+          
+          {/* Dashboard for manufacturers/distributors */}
+          <Route path="dashboard" element={
+            <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+        </Route>
+        
+        {/* Redirect to login if not authenticated */}
+        <Route path="*" element={user ? <Navigate to="/" /> : <Navigate to="/login" />} />
+      </Routes>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
