@@ -16,20 +16,30 @@ Vanguard is a revolutionary anti-counterfeiting system that combines cutting-edg
 ### 🤖 AI & Machine Learning
 - **Intelligent Pattern Detection**: Real-time anomaly detection using TensorFlow.js
 - **Predictive Analytics**: Forecast counterfeit trends and high-risk areas
-- **Natural Language AI Assistant**: Conversational interface for data analysis
+- **Natural Language AI Assistant**: Conversational interface for data analysis and counterfeit reporting
 - **Automated Risk Scoring**: ML-driven channel and user behavior analysis
+- **Repeat Offender Tracking**: AI-powered identification of recurring counterfeit sources
+- **Illicit Sales Channel Detection**: Machine learning algorithms to identify unauthorized distribution
 
 ### 🎮 Consumer Engagement
 - **Gamification System**: Points, badges, achievements, and leaderboards
 - **Dynamic Rewards Catalog**: Gifts, discounts, experiences, and NFT badges
 - **Social Features**: Achievement sharing and referral programs
 - **Streak Tracking**: Daily engagement bonuses
+- **Free Gifts**: Rewards for identifying counterfeit products
+- **Reward Points**: Point system for active participation in the verification ecosystem
+- **Loyalty Program**: Tiered benefits for regular users
+- **Community Challenges**: Group activities to increase engagement
 
 ### 📊 Advanced Analytics
 - **Real-Time Dashboards**: Interactive visualizations with Recharts
 - **Heat Maps**: Geographic counterfeit distribution
 - **Channel Analysis**: Good vs. bad channel identification
 - **Sentiment Analysis**: AI-powered complaint categorization
+- **Distribution Channel Evaluation**: Metrics on trustworthy vs. problematic channels
+- **Customer Complaint Tracking**: Centralized system for managing and analyzing customer reports
+- **Trend Analysis**: Long-term data visualization for spotting patterns
+- **Performance Metrics**: Channel-specific authentication success rates
 
 ### 🔗 Blockchain Integration
 - **Smart Contracts**: Automated reward distribution (ERC-20/ERC-721)
@@ -144,22 +154,37 @@ This creates:
 - 30+ product categories
 - 500 diverse users
 - 200 distribution channels
-- 365 days of realistic events
+- 365 days of realistic events (full year of historical data)
 - Pre-trained ML models
+- Simulated counterfeit patterns
+- Realistic distribution channel behaviors
+- Consumer verification activities
+- Suspicious transaction patterns
+- Repeat offender profiles
+- Geographic hotspot data
 
 ## 🧪 Testing
 
 Run the comprehensive test suite:
 
 ```bash
-# Run all tests
-cd server
-npm test
+# Run all tests with a single command
+./run-all-tests.sh
 
 # Run specific test suites
-npm test -- --testNamePattern="AI Chat"
-npm test -- --testNamePattern="ML Anomaly"
-npm test -- --testNamePattern="Rewards"
+cd server && npm test                # Backend API tests
+cd client && npm test                # Frontend UI tests
+npm run test:integration             # Integration tests
+bash deploy/verify-deployment.sh     # Deployment verification
+bash security/security-test.sh       # Security tests
+k6 run performance/load-test.js      # Performance tests
+npm run test:migrations              # Database migration tests
+cd server/workers && npm test        # ML model tests
+
+# Run specific test patterns
+cd server && npm test -- --testNamePattern="AI Chat"
+cd server && npm test -- --testNamePattern="ML Anomaly"
+cd server && npm test -- --testNamePattern="Rewards"
 ```
 
 ## 📚 API Documentation
