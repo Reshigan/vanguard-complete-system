@@ -80,32 +80,42 @@ vanguard-complete-system/
 
 ## 🚀 Quick Start
 
-### Option 1: One-Command Installation (Recommended for Production)
+### macOS Installation (Recommended)
+
+For a simple installation on macOS:
+
+```bash
+# Clone the repository
+git clone https://github.com/Reshigan/vanguard-complete-system.git
+cd vanguard-complete-system
+
+# Install Docker Desktop for Mac if you don't have it already
+# Download from: https://www.docker.com/products/docker-desktop/
+
+# Start the system using Docker Compose
+docker-compose -f docker-compose.mac.yml up -d
+```
+
+After installation, the system will be available at:
+- Web Interface: http://localhost:8080
+- API: http://localhost:3000/api
+
+### Option 1: One-Command Installation (For Linux Production Servers)
 
 For a complete installation on a fresh Linux server, run:
 
 ```bash
-# Download the installation script
-curl -sSL https://raw.githubusercontent.com/Reshigan/vanguard-complete-system/main/install-vanguard.sh -o install-vanguard.sh
+# Clone the repository
+git clone https://github.com/Reshigan/vanguard-complete-system.git
+cd vanguard-complete-system
 
-# Make it executable
-chmod +x install-vanguard.sh
-
-# Run the installation script as root
-sudo ./install-vanguard.sh
+# Run Docker Compose
+docker-compose up -d
 ```
-
-This script will:
-- Install all required dependencies (Docker, Docker Compose, etc.)
-- Clone the repository
-- Deploy the complete system with Docker
-- Set up automatic backups
-- Create systemd service for auto-start
-- Generate a full year of test data
 
 After installation, the system will be available at:
 - Web Interface: http://your-server-ip:8080
-- API: http://your-server-ip:3001/api
+- API: http://your-server-ip:3000/api
 
 ### Option 2: Manual Installation (Development)
 

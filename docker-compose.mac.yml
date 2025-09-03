@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14-alpine
+    container_name: vanguard-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vanguard
+      POSTGRES_PASSWORD: vanguard_secure_password
+      POSTGRES_DB: vanguard_production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vanguard"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: vanguard-redis
+    restart: unless-stopped
+    command: redis-server --requirepass redis_secure_password
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: vanguard-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://vanguard:vanguard_secure_password@postgres:5432/vanguard_production
+      REDIS_URL: redis://:redis_secure_password@redis:6379
+      JWT_SECRET: your_jwt_secret_here
+      JWT_EXPIRES_IN: 7d
+      REFRESH_TOKEN_EXPIRES_IN: 30d
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - uploads:/app/uploads
+      - ml_models:/app/services/ml/models
+    ports:
+      - "3000:3000"
+    command: npm run start:dev
+
+  # Frontend Web App
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+      args:
+        VITE_API_URL: http://localhost:3000/api
+    container_name: vanguard-frontend
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: npm run dev
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  uploads:
+    driver: local
+  ml_models:
+    driver: local
+
+networks:
+  default:
+    name: vanguard-network
+    driver: bridge
