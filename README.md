@@ -80,16 +80,45 @@ vanguard-complete-system/
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Option 1: One-Command Installation (Recommended for Production)
+
+For a complete installation on a fresh Linux server, run:
+
+```bash
+# Download the installation script
+curl -sSL https://raw.githubusercontent.com/Reshigan/vanguard-complete-system/main/install-vanguard.sh -o install-vanguard.sh
+
+# Make it executable
+chmod +x install-vanguard.sh
+
+# Run the installation script as root
+sudo ./install-vanguard.sh
+```
+
+This script will:
+- Install all required dependencies (Docker, Docker Compose, etc.)
+- Clone the repository
+- Deploy the complete system with Docker
+- Set up automatic backups
+- Create systemd service for auto-start
+- Generate a full year of test data
+
+After installation, the system will be available at:
+- Web Interface: http://your-server-ip:8080
+- API: http://your-server-ip:3001/api
+
+### Option 2: Manual Installation (Development)
+
+#### Prerequisites
 - Node.js 18+ 
 - PostgreSQL 14+
 - Redis (optional, for caching)
 
-### Installation
+#### Installation Steps
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/vanguard-complete-system.git
+git clone https://github.com/Reshigan/vanguard-complete-system.git
 cd vanguard-complete-system
 ```
 
@@ -139,6 +168,24 @@ The application will be available at:
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:3000
 - API Documentation: http://localhost:3000/api-docs
+
+### Option 3: Docker Deployment (Manual)
+
+For a Docker-based deployment without the automated installation script:
+
+```bash
+# Clone the repository
+git clone https://github.com/Reshigan/vanguard-complete-system.git
+cd vanguard-complete-system
+
+# Run the deployment script
+chmod +x deploy-vanguard.sh
+./deploy-vanguard.sh
+```
+
+The system will be available at:
+- Web Interface: http://localhost:8080
+- API: http://localhost:3001/api
 
 ## 📊 Test Data Generation
 
@@ -226,41 +273,71 @@ cd server && npm test -- --testNamePattern="Rewards"
 
 ## 🌐 Deployment
 
-### Docker Deployment
+### Docker Deployment (Recommended)
+
+The system includes a comprehensive Docker deployment solution with all necessary components:
 
 ```bash
-# Build and run with Docker Compose
-docker-compose up -d
+# Option 1: Use the automated installation script (recommended)
+curl -sSL https://raw.githubusercontent.com/Reshigan/vanguard-complete-system/main/install-vanguard.sh -o install-vanguard.sh
+chmod +x install-vanguard.sh
+sudo ./install-vanguard.sh
 
-# Scale services
-docker-compose up -d --scale api=3
+# Option 2: Use the deployment script directly
+./deploy-vanguard.sh
+
+# Option 3: Manual Docker Compose deployment
+docker-compose -f docker-compose.production.yml up -d
+
+# Scale services if needed
+docker-compose -f docker-compose.production.yml up -d --scale app=3 --scale ml-worker=2
 ```
 
-### Production Deployment
+### System Management
 
-1. **Environment Setup**
 ```bash
-NODE_ENV=production
-DATABASE_URL=postgresql://...
-REDIS_URL=redis://...
-JWT_SECRET=your-secret-key
+# Start the system
+systemctl start vanguard
+
+# Stop the system
+systemctl stop vanguard
+
+# Check status
+systemctl status vanguard
+
+# View logs
+docker-compose -f /opt/vanguard-complete-system/docker-compose.production.yml logs -f
+
+# Update the system
+/opt/vanguard-complete-system/update-vanguard.sh
+
+# Backup the system
+/opt/vanguard-complete-system/backup-vanguard.sh
 ```
 
-2. **Build for Production**
-```bash
-# Build client
-cd client
-npm run build
+### Cloud Deployment
 
-# Build server
-cd ../server
-npm run build
-```
+The system can be deployed to any cloud provider that supports Docker:
 
-3. **Deploy to Cloud**
-- AWS: Use Elastic Beanstalk or ECS
-- Google Cloud: Use App Engine or Cloud Run
-- Azure: Use App Service or Container Instances
+1. **AWS Deployment**
+   - Use ECS (Elastic Container Service) with the provided docker-compose.production.yml
+   - Use RDS for PostgreSQL and ElastiCache for Redis
+   - Deploy behind an Application Load Balancer
+
+2. **Google Cloud Deployment**
+   - Use Google Kubernetes Engine (GKE) or Cloud Run
+   - Use Cloud SQL for PostgreSQL and Memorystore for Redis
+   - Deploy behind Cloud Load Balancing
+
+3. **Azure Deployment**
+   - Use Azure Kubernetes Service (AKS) or Container Instances
+   - Use Azure Database for PostgreSQL and Azure Cache for Redis
+   - Deploy behind Azure Application Gateway
+
+4. **Digital Ocean Deployment**
+   - Use Digital Ocean Kubernetes or App Platform
+   - Use Managed PostgreSQL and Redis
+   - Deploy behind a Load Balancer
 
 ## 📈 Performance Metrics
 
