@@ -1,0 +1,94 @@
+name: vanguard
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14-alpine
+    container_name: vanguard-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vanguard
+      POSTGRES_PASSWORD: vanguard_secure_password
+      POSTGRES_DB: vanguard_production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vanguard"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: vanguard-redis
+    restart: unless-stopped
+    command: redis-server --requirepass redis_secure_password
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API - Using a simple Node.js image for development
+  api:
+    image: node:18-alpine
+    container_name: vanguard-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://vanguard:vanguard_secure_password@postgres:5432/vanguard_production
+      REDIS_URL: redis://:redis_secure_password@redis:6379
+      JWT_SECRET: your_jwt_secret_here
+      JWT_EXPIRES_IN: 7d
+      REFRESH_TOKEN_EXPIRES_IN: 30d
+    volumes:
+      - ./server:/app
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "if [ -f package.json ]; then
+               npm install && npm run dev;
+             else
+               echo '{ \"name\": \"vanguard-api\", \"version\": \"1.0.0\", \"scripts\": { \"dev\": \"node server.js\" } }' > package.json &&
+               echo 'const express = require(\"express\"); const app = express(); const PORT = process.env.PORT || 3000; app.get(\"/api\", (req, res) => { res.json({ status: \"ok\", message: \"Vanguard API is running\" }); }); app.listen(PORT, () => { console.log(`Server running on port ${PORT}`); });' > server.js &&
+               npm install express && npm run dev;
+             fi"
+
+  # Frontend Web App - Using a simple Nginx image for development
+  frontend:
+    image: nginx:alpine
+    container_name: vanguard-frontend
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+    volumes:
+      - ./client:/usr/share/nginx/html
+    command: >
+      sh -c "if [ ! -f /usr/share/nginx/html/index.html ]; then
+               mkdir -p /usr/share/nginx/html &&
+               echo '<!DOCTYPE html><html><head><title>Vanguard</title></head><body><h1>Vanguard Anti-Counterfeiting System</h1><p>This is a placeholder page. Replace with your actual frontend.</p></body></html>' > /usr/share/nginx/html/index.html;
+             fi && nginx -g 'daemon off;'"
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  default:
+    name: vanguard-network

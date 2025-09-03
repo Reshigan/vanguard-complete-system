@@ -93,24 +93,47 @@ cd vanguard-complete-system
 # Download from: https://www.docker.com/products/docker-desktop/
 
 # Start the system using Docker Compose
-docker-compose -f docker-compose.mac.yml up -d
+docker compose up -d
 ```
+
+This uses the new `compose.yaml` file which is compatible with the latest Docker Compose syntax.
 
 After installation, the system will be available at:
 - Web Interface: http://localhost:8080
 - API: http://localhost:3000/api
 
-### Option 1: One-Command Installation (For Linux Production Servers)
-
-For a complete installation on a fresh Linux server, run:
+If you encounter any issues, you can try the following:
 
 ```bash
+# Make sure Docker Desktop is running
+# Then run:
+docker compose down
+docker compose up -d
+```
+
+### Linux Installation
+
+For a complete installation on a Linux server:
+
+```bash
+# Install Docker and Docker Compose if you don't have them
+# For Ubuntu/Debian:
+sudo apt update
+sudo apt install -y docker.io docker-compose-v2
+
+# For CentOS/RHEL:
+# sudo yum install -y docker docker-compose-plugin
+
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
 # Clone the repository
 git clone https://github.com/Reshigan/vanguard-complete-system.git
 cd vanguard-complete-system
 
 # Run Docker Compose
-docker-compose up -d
+sudo docker compose up -d
 ```
 
 After installation, the system will be available at:
