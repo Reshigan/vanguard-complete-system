@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifi AI - Consumer Portal</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/consumer.css" rel="stylesheet">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1e8e3e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Verifi AI">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <div class="brand-icon me-2">
+                    <i class="bi bi-shield-check text-success"></i>
+                </div>
+                <span class="brand-text">Verifi AI</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-section="home">
+                            <i class="bi bi-house-door me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="scan">
+                            <i class="bi bi-qr-code-scan me-1"></i>Scan Product
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="rewards">
+                            <i class="bi bi-gift me-1"></i>Rewards
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="history">
+                            <i class="bi bi-clock-history me-1"></i>History
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar me-2">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <span class="user-name">John Doe</span>
+                            <span class="badge bg-success ms-2" id="userPoints">1,250</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" data-section="profile"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#" data-section="settings"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home-section" class="content-section active">
+            <div class="container py-4">
+                <!-- Welcome Card -->
+                <div class="card welcome-card mb-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="card-title mb-2">Welcome back, John! 👋</h2>
+                                <p class="card-text text-muted mb-3">
+                                    You've verified <strong>47 products</strong> and earned <strong>1,250 points</strong> this month.
+                                    Keep up the great work protecting authentic products!
+                                </p>
+                                <button class="btn btn-success btn-lg" data-section="scan">
+                                    <i class="bi bi-qr-code-scan me-2"></i>Scan New Product
+                                </button>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="achievement-badge">
+                                    <i class="bi bi-award text-warning"></i>
+                                    <div class="badge-text">
+                                        <small>Current Level</small>
+                                        <strong>Gold Verifier</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-success">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>47</h3>
+                                <p>Products Verified</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-warning">
+                                <i class="bi bi-gift"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>1,250</h3>
+                                <p>Reward Points</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-danger">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>3</h3>
+                                <p>Counterfeits Found</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-info">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>12</h3>
+                                <p>Friends Referred</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Activity</h5>
+                        <a href="#" class="text-success" data-section="history">View All</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon bg-success">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h6>Johnnie Walker Blue Label verified</h6>
+                                    <p class="text-muted mb-1">Authentic product confirmed</p>
+                                    <small class="text-muted">2 hours ago • +50 points</small>
+                                </div>
+                                <div class="activity-badge">
+                                    <span class="badge bg-success">Authentic</span>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-icon bg-danger">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h6>Suspicious Hennessy XO reported</h6>
+                                    <p class="text-muted mb-1">Counterfeit detected and reported</p>
+                                    <small class="text-muted">1 day ago • +200 points</small>
+                                </div>
+                                <div class="activity-badge">
+                                    <span class="badge bg-danger">Counterfeit</span>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-icon bg-warning">
+                                    <i class="bi bi-gift"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h6>Reward redeemed</h6>
+                                    <p class="text-muted mb-1">$10 Amazon Gift Card</p>
+                                    <small class="text-muted">3 days ago • -500 points</small>
+                                </div>
+                                <div class="activity-badge">
+                                    <span class="badge bg-warning">Reward</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scan Section -->
+        <section id="scan-section" class="content-section">
+            <div class="container py-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card scan-card">
+                            <div class="card-header text-center">
+                                <h3><i class="bi bi-qr-code-scan me-2"></i>Verify Product Authenticity</h3>
+                                <p class="text-muted mb-0">Scan the QR code or NFC tag on your product</p>
+                            </div>
+                            <div class="card-body">
+                                <!-- Camera Scanner -->
+                                <div class="scanner-container mb-4">
+                                    <div id="scanner-placeholder" class="scanner-placeholder">
+                                        <i class="bi bi-camera text-muted"></i>
+                                        <p class="text-muted">Click to start camera</p>
+                                        <button class="btn btn-success" id="startScanBtn">
+                                            <i class="bi bi-camera me-2"></i>Start Scanner
+                                        </button>
+                                    </div>
+                                    <video id="scanner-video" class="scanner-video d-none"></video>
+                                    <canvas id="scanner-canvas" class="d-none"></canvas>
+                                </div>
+
+                                <!-- Manual Input -->
+                                <div class="manual-input">
+                                    <h6>Or enter code manually:</h6>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="manualCode" placeholder="Enter product code">
+                                        <button class="btn btn-success" id="verifyManualBtn">
+                                            <i class="bi bi-search me-2"></i>Verify
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Demo Codes -->
+                                <div class="demo-codes">
+                                    <h6>Try these demo codes:</h6>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-outline-success btn-sm demo-code" data-code="JW-BLUE-001">
+                                            Johnnie Walker Blue
+                                        </button>
+                                        <button class="btn btn-outline-success btn-sm demo-code" data-code="HENNESSY-XO-002">
+                                            Hennessy XO
+                                        </button>
+                                        <button class="btn btn-outline-success btn-sm demo-code" data-code="JACK-SB-003">
+                                            Jack Daniels Single Barrel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rewards Section -->
+        <section id="rewards-section" class="content-section">
+            <div class="container py-4">
+                <!-- Points Balance -->
+                <div class="card points-card mb-4">
+                    <div class="card-body text-center">
+                        <div class="points-display">
+                            <i class="bi bi-gem text-warning"></i>
+                            <h2 class="points-amount">1,250</h2>
+                            <p class="text-muted">Available Points</p>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-success" style="width: 62.5%"></div>
+                        </div>
+                        <p class="text-muted">750 points until next level (Platinum Verifier)</p>
+                    </div>
+                </div>
+
+                <!-- Available Rewards -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Available Rewards</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="reward-card">
+                                    <div class="reward-image">
+                                        <i class="bi bi-gift text-success"></i>
+                                    </div>
+                                    <div class="reward-content">
+                                        <h6>$5 Amazon Gift Card</h6>
+                                        <p class="text-muted">Digital delivery</p>
+                                        <div class="reward-cost">
+                                            <span class="badge bg-warning">250 points</span>
+                                        </div>
+                                        <button class="btn btn-success btn-sm w-100" data-reward="amazon-5">
+                                            Redeem Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="reward-card">
+                                    <div class="reward-image">
+                                        <i class="bi bi-cup-hot text-warning"></i>
+                                    </div>
+                                    <div class="reward-content">
+                                        <h6>Starbucks Coffee</h6>
+                                        <p class="text-muted">Free grande drink</p>
+                                        <div class="reward-cost">
+                                            <span class="badge bg-warning">400 points</span>
+                                        </div>
+                                        <button class="btn btn-success btn-sm w-100" data-reward="starbucks">
+                                            Redeem Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="reward-card">
+                                    <div class="reward-image">
+                                        <i class="bi bi-gift text-danger"></i>
+                                    </div>
+                                    <div class="reward-content">
+                                        <h6>$10 Amazon Gift Card</h6>
+                                        <p class="text-muted">Digital delivery</p>
+                                        <div class="reward-cost">
+                                            <span class="badge bg-warning">500 points</span>
+                                        </div>
+                                        <button class="btn btn-success btn-sm w-100" data-reward="amazon-10">
+                                            Redeem Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="reward-card">
+                                    <div class="reward-image">
+                                        <i class="bi bi-phone text-info"></i>
+                                    </div>
+                                    <div class="reward-content">
+                                        <h6>Phone Accessories</h6>
+                                        <p class="text-muted">Cases, chargers, etc.</p>
+                                        <div class="reward-cost">
+                                            <span class="badge bg-warning">750 points</span>
+                                        </div>
+                                        <button class="btn btn-success btn-sm w-100" data-reward="accessories">
+                                            Redeem Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="reward-card">
+                                    <div class="reward-image">
+                                        <i class="bi bi-ticket text-primary"></i>
+                                    </div>
+                                    <div class="reward-content">
+                                        <h6>Movie Tickets</h6>
+                                        <p class="text-muted">2 tickets to any movie</p>
+                                        <div class="reward-cost">
+                                            <span class="badge bg-warning">1,000 points</span>
+                                        </div>
+                                        <button class="btn btn-success btn-sm w-100" data-reward="movies">
+                                            Redeem Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="reward-card premium">
+                                    <div class="reward-image">
+                                        <i class="bi bi-gem text-warning"></i>
+                                    </div>
+                                    <div class="reward-content">
+                                        <h6>Premium Whiskey Tasting</h6>
+                                        <p class="text-muted">Exclusive event invitation</p>
+                                        <div class="reward-cost">
+                                            <span class="badge bg-warning">2,000 points</span>
+                                        </div>
+                                        <button class="btn btn-outline-success btn-sm w-100" disabled>
+                                            Need 750 more
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history-section" class="content-section">
+            <div class="container py-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Verification History</h5>
+                        <div class="filter-buttons">
+                            <button class="btn btn-sm btn-outline-success active" data-filter="all">All</button>
+                            <button class="btn btn-sm btn-outline-success" data-filter="authentic">Authentic</button>
+                            <button class="btn btn-sm btn-outline-success" data-filter="counterfeit">Counterfeit</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="history-list">
+                            <!-- History items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile-section" class="content-section">
+            <div class="container py-4">
+                <div class="row">
+                    <div class="col-lg-4 mb-4">
+                        <div class="card profile-card">
+                            <div class="card-body text-center">
+                                <div class="profile-avatar mb-3">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                                <h4>John Doe</h4>
+                                <p class="text-muted">Gold Verifier</p>
+                                <div class="profile-stats">
+                                    <div class="stat">
+                                        <strong>47</strong>
+                                        <small>Verifications</small>
+                                    </div>
+                                    <div class="stat">
+                                        <strong>1,250</strong>
+                                        <small>Points</small>
+                                    </div>
+                                    <div class="stat">
+                                        <strong>3</strong>
+                                        <small>Reports</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Profile Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="profileForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">First Name</label>
+                                            <input type="text" class="form-control" value="John">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" value="Doe">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" value="john.doe@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control" value="+1 (555) 123-4567">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="form-control" value="New York, NY">
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Update Profile</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Verification Result Modal -->
+    <div class="modal fade" id="verificationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Verification Result</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="verificationResult">
+                        <!-- Result content will be inserted here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="shareResultBtn">Share Result</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header" id="chatHeader">
+            <i class="bi bi-robot"></i>
+            <span>Verifi AI Assistant</span>
+            <button class="chat-close" id="chatClose">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message ai-message">
+                    <div class="message-content">
+                        Hi! I'm your Verifi AI assistant. I can help you understand product authenticity, explain verification results, and answer questions about rewards. How can I help you today?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Ask me anything..." class="form-control">
+                <button id="chatSend" class="btn btn-success">
+                    <i class="bi bi-send"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button class="chat-toggle" id="chatToggle">
+        <i class="bi bi-chat-dots"></i>
+    </button>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/consumer.js"></script>
+</body>
+</html>

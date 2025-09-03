@@ -1,140 +1,124 @@
+# Verifi AI Production Docker Compose Configuration
+# This configuration is optimized for production deployment
+
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    container_name: vanguard-postgres
-    environment:
-      POSTGRES_DB: vanguard
-      POSTGRES_USER: vanguard
-      POSTGRES_PASSWORD: vanguard123
-      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./server/database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5433:5432"  # Changed from 5432:5432 to avoid port conflict
-    networks:
-      - vanguard-network
+  # Main Application Server
+  verifi-ai-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    container_name: verifi-ai-server
     restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=postgresql://verifi:${DATABASE_PASSWORD}@verifi-ai-db:5432/verifi_ai
+      - REDIS_URL=redis://verifi-ai-redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - ENABLE_ML_WORKER=true
+      - SEED_DATABASE=false
+      - LOG_LEVEL=info
+      - BLOCKCHAIN_NETWORK=${BLOCKCHAIN_NETWORK:-sepolia}
+      - BLOCKCHAIN_RPC_URL=${BLOCKCHAIN_RPC_URL}
+      - VERIFI_AI_CONTRACT_ADDRESS=${VERIFI_AI_CONTRACT_ADDRESS}
+      - BLOCKCHAIN_PRIVATE_KEY=${BLOCKCHAIN_PRIVATE_KEY}
+    volumes:
+      - verifi-ai-logs:/app/logs
+      - verifi-ai-uploads:/app/uploads
+      - verifi-ai-temp:/app/temp
+    depends_on:
+      - verifi-ai-db
+      - verifi-ai-redis
+    networks:
+      - verifi-ai-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U vanguard -d vanguard"]
+      test: ["CMD", "./healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # PostgreSQL Database
+  verifi-ai-db:
+    image: postgres:15-alpine
+    container_name: verifi-ai-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=verifi_ai
+      - POSTGRES_USER=verifi
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+    volumes:
+      - verifi-ai-db-data:/var/lib/postgresql/data
+      - ./server/migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - verifi-ai-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U verifi -d verifi_ai"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   # Redis Cache
-  redis:
+  verifi-ai-redis:
     image: redis:7-alpine
-    container_name: vanguard-redis
-    command: redis-server --requirepass vanguard123 --appendonly yes
-    volumes:
-      - redis_data:/data
-    ports:
-      - "6380:6379"  # Changed from 6379:6379 to avoid port conflict
-    networks:
-      - vanguard-network
+    container_name: verifi-ai-redis
     restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - verifi-ai-redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - verifi-ai-network
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "vanguard123", "ping"]
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 10s
-      timeout: 5s
+      timeout: 3s
       retries: 5
 
-  # Main Application
-  app:
-    build: .
-    container_name: vanguard-app
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      DATABASE_URL: postgresql://vanguard:vanguard123@postgres:5432/vanguard
-      REDIS_URL: redis://:vanguard123@redis:6379
-      JWT_SECRET: vanguard-production-secret-change-this-in-production
-      OPENAI_API_KEY: your-openai-api-key-here
-      UPLOAD_DIR: /app/server/uploads
-      LOG_LEVEL: info
-    volumes:
-      - app_uploads:/app/server/uploads
-      - app_logs:/app/logs
-      - app_data:/app/server/data
-    ports:
-      - "3001:3000"  # Changed from 3000:3000 to avoid port conflict
-    networks:
-      - vanguard-network
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # ML Worker
-  ml-worker:
-    build: .
-    container_name: vanguard-ml-worker
-    command: ["node", "server/workers/ml-worker.js"]
-    environment:
-      NODE_ENV: production
-      DATABASE_URL: postgresql://vanguard:vanguard123@postgres:5432/vanguard
-      REDIS_URL: redis://:vanguard123@redis:6379
-      LOG_LEVEL: info
-    volumes:
-      - app_data:/app/server/data
-      - app_logs:/app/logs
-    networks:
-      - vanguard-network
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      app:
-        condition: service_healthy
-    restart: unless-stopped
-
   # Nginx Reverse Proxy
-  nginx:
+  verifi-ai-nginx:
     image: nginx:alpine
-    container_name: vanguard-nginx
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./client/dist:/usr/share/nginx/html
-      - nginx_logs:/var/log/nginx
-    ports:
-      - "8080:80"  # Changed from 80:80 to avoid port conflict
-      - "8443:443"  # Changed from 443:443 to avoid port conflict
-    networks:
-      - vanguard-network
-    depends_on:
-      - app
+    container_name: verifi-ai-nginx
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/production/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./client:/usr/share/nginx/html:ro
+      - verifi-ai-ssl-certs:/etc/nginx/ssl
+      - verifi-ai-logs:/var/log/nginx
+    depends_on:
+      - verifi-ai-server
+    networks:
+      - verifi-ai-network
 
-volumes:
-  postgres_data:
-    driver: local
-  redis_data:
-    driver: local
-  app_uploads:
-    driver: local
-  app_logs:
-    driver: local
-  app_data:
-    driver: local
-  nginx_logs:
-    driver: local
-
+# Networks
 networks:
-  vanguard-network:
+  verifi-ai-network:
     driver: bridge
+    name: verifi-ai-network
+
+# Volumes
+volumes:
+  verifi-ai-db-data:
+    name: verifi-ai-db-data
+  verifi-ai-redis-data:
+    name: verifi-ai-redis-data
+  verifi-ai-logs:
+    name: verifi-ai-logs
+  verifi-ai-uploads:
+    name: verifi-ai-uploads
+  verifi-ai-temp:
+    name: verifi-ai-temp
+  verifi-ai-ssl-certs:
+    name: verifi-ai-ssl-certs

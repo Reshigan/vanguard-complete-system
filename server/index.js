@@ -94,7 +94,7 @@ try {
 app.get('/api/status', (req, res) => {
   res.json({
     status: 'running',
-    message: 'Vanguard API is running in Docker container',
+    message: 'Verifi AI API is running in Docker container',
     timestamp: new Date().toISOString()
   });
 });
@@ -135,7 +135,7 @@ process.on('SIGINT', () => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  logger.info(`Vanguard API Server running on port ${PORT}`);
+  logger.info(`Verifi AI API Server running on port ${PORT}`);
   logger.info(`Environment: ${process.env.NODE_ENV}`);
   logger.info(`Health check available at: http://localhost:${PORT}/health`);
 });
