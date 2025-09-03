@@ -100,7 +100,7 @@ This uses the new `compose.yaml` file which is compatible with the latest Docker
 
 After installation, the system will be available at:
 - Web Interface: http://localhost:8080
-- API: http://localhost:3000/api
+- API: http://localhost:3001/api
 
 If you encounter any issues, you can try the following:
 
@@ -138,7 +138,7 @@ sudo docker compose up -d
 
 After installation, the system will be available at:
 - Web Interface: http://your-server-ip:8080
-- API: http://your-server-ip:3000/api
+- API: http://your-server-ip:3001/api
 
 ### Option 2: Manual Installation (Development)
 
