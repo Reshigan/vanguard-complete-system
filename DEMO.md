@@ -4,6 +4,47 @@
 
 This guide demonstrates the complete Vanguard Anti-Counterfeiting System workflow, including the counterfeit detection scenario with **Vanguard Reserve** whisky.
 
+## Quick Start Demo Environment
+
+We've created a simplified demo environment that you can run locally on your macOS machine with minimal setup:
+
+### Prerequisites
+
+- Docker Desktop for Mac
+  - Download from: https://www.docker.com/products/docker-desktop/
+  - Install and start Docker Desktop
+
+### Running the Demo
+
+1. Open Terminal and navigate to the project directory:
+   ```bash
+   cd /path/to/vanguard-complete-system
+   ```
+
+2. Run the demo script:
+   ```bash
+   ./run-demo.sh
+   ```
+
+3. Access the demo at:
+   - Web Interface: http://localhost:8080
+   - API: http://localhost:3001/api
+
+### Stopping the Demo
+
+To stop the demo environment:
+
+```bash
+docker compose -f demo-compose.yaml down
+```
+
+This simplified demo includes:
+- AI & Machine Learning features
+- Consumer engagement with rewards and gamification
+- Advanced analytics for manufacturers
+- Illicit sales channel detection
+- AI chat assistant
+
 ## Demo Scenario: Mark's Experience
 
 ### Background

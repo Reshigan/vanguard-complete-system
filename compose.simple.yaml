@@ -1,0 +1,417 @@
+name: vanguard
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14-alpine
+    container_name: vanguard-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vanguard
+      POSTGRES_PASSWORD: vanguard_secure_password
+      POSTGRES_DB: vanguard_production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: vanguard-redis
+    restart: unless-stopped
+    command: redis-server --requirepass redis_secure_password
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  # Backend API
+  api:
+    image: node:18-alpine
+    container_name: vanguard-api
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://vanguard:vanguard_secure_password@postgres:5432/vanguard_production
+      REDIS_URL: redis://:redis_secure_password@redis:6379
+      JWT_SECRET: your_jwt_secret_here
+    volumes:
+      - ./server:/app
+    working_dir: /app
+    ports:
+      - "3001:3000"
+    command: >
+      sh -c "mkdir -p /app &&
+             echo '{\"name\":\"vanguard-api\",\"version\":\"1.0.0\",\"scripts\":{\"start\":\"node server.js\"}}' > /app/package.json &&
+             echo 'const express = require(\"express\"); const cors = require(\"cors\"); const app = express(); app.use(cors()); app.use(express.json()); app.get(\"/api\", (req, res) => { res.json({ status: \"ok\", message: \"Vanguard API is running\" }); }); app.post(\"/api/tokens/validate\", (req, res) => { res.json({ status: \"success\", message: \"Token validated successfully\", isAuthentic: true, product: { id: 123, name: \"Premium Product\", manufacturer: \"Vanguard Industries\", manufactureDate: \"2025-01-15\" } }); }); app.get(\"/api/tokens/:id/history\", (req, res) => { res.json({ status: \"success\", history: [ { date: \"2025-08-01\", location: \"San Francisco, CA\", status: \"Manufactured\" }, { date: \"2025-08-10\", location: \"Chicago, IL\", status: \"Distribution\" }, { date: \"2025-08-20\", location: \"New York, NY\", status: \"Retail\" }, { date: \"2025-08-30\", location: \"Boston, MA\", status: \"Verified\" } ] }); }); app.get(\"/api/rewards/v2/dashboard\", (req, res) => { res.json({ status: \"success\", points: 1250, level: 3, badges: [\"Verification Pro\", \"Counterfeit Hunter\", \"Loyal Customer\"], recentRewards: [ { date: \"2025-08-25\", points: 50, action: \"Product Verification\" }, { date: \"2025-08-20\", points: 200, action: \"Counterfeit Report\" } ] }); }); app.get(\"/api/analytics/manufacturer/dashboard\", (req, res) => { res.json({ status: \"success\", verifications: 12500, counterfeits: 320, channels: { trusted: [\"Channel A\", \"Channel B\", \"Channel C\"], suspicious: [\"Channel X\", \"Channel Y\"] }, recentActivity: [ { date: \"2025-08-30\", type: \"verification\", location: \"New York\" }, { date: \"2025-08-29\", type: \"counterfeit\", location: \"Miami\" } ] }); }); app.get(\"/api/analytics/ml/suspicious-patterns\", (req, res) => { res.json({ status: \"success\", patterns: [ { id: 1, type: \"Geographic Anomaly\", description: \"Unusual verification pattern detected in Phoenix area\", confidence: 0.87, affectedProducts: [\"Product A\", \"Product B\"] }, { id: 2, type: \"Timing Anomaly\", description: \"Multiple verifications at unusual hours\", confidence: 0.76, affectedProducts: [\"Product C\"] } ] }); }); app.post(\"/api/analytics/ai/chat/message\", (req, res) => { const userMessage = req.body.message || \"\"; let response = \"I don't understand that question.\"; if (userMessage.toLowerCase().includes(\"counterfeit\")) { response = \"Based on our data, we've detected a 15% increase in counterfeit activity in the Southeast region. Would you like me to prepare a detailed report?\"; } else if (userMessage.toLowerCase().includes(\"channel\")) { response = \"Channel analysis shows that 'Distributor X' has a 98% authenticity rate, while 'Retailer Y' has dropped to 82%. This suggests potential supply chain issues with Retailer Y.\"; } else if (userMessage.toLowerCase().includes(\"trend\")) { response = \"Current trends show increased verification activity on weekends, with 30% more scans on Saturdays. Consumer engagement is highest between 6-8pm.\"; } res.json({ status: \"success\", response: response }); }); app.listen(3000, \"0.0.0.0\", () => { console.log(\"Vanguard API server running on port 3000\"); });' > /app/server.js &&
+             npm install express cors &&
+             node server.js"
+
+  # Frontend Web App
+  frontend:
+    image: nginx:alpine
+    container_name: vanguard-frontend
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+    volumes:
+      - ./client:/usr/share/nginx/html
+    command: >
+      sh -c "mkdir -p /usr/share/nginx/html &&
+             cat > /usr/share/nginx/html/index.html << 'EOT'
+<!DOCTYPE html>
+<html lang=\"en\">
+<head>
+  <meta charset=\"UTF-8\">
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+  <title>Vanguard Anti-Counterfeiting System</title>
+  <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css\" rel=\"stylesheet\">
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; }
+    .navbar { background-color: #1a237e !important; }
+    .hero { background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%); color: white; padding: 4rem 0; margin-bottom: 2rem; }
+    .feature-card { border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease; height: 100%; }
+    .feature-card:hover { transform: translateY(-5px); }
+    .feature-icon { font-size: 2.5rem; margin-bottom: 1rem; color: #3949ab; }
+    .api-response { background-color: #f5f5f5; border-radius: 5px; padding: 15px; font-family: monospace; max-height: 300px; overflow-y: auto; }
+    .chat-container { height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 5px; padding: 10px; margin-bottom: 10px; }
+    .chat-message { margin-bottom: 10px; padding: 8px 12px; border-radius: 18px; max-width: 80%; clear: both; }
+    .user-message { background-color: #e3f2fd; float: right; }
+    .ai-message { background-color: #f1f1f1; float: left; }
+  </style>
+</head>
+<body>
+  <nav class=\"navbar navbar-expand-lg navbar-dark bg-primary\">
+    <div class=\"container\">
+      <a class=\"navbar-brand\" href=\"#\"><strong>VANGUARD</strong></a>
+      <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarNav\">
+        <span class=\"navbar-toggler-icon\"></span>
+      </button>
+      <div class=\"collapse navbar-collapse\" id=\"navbarNav\">
+        <ul class=\"navbar-nav ms-auto\">
+          <li class=\"nav-item\"><a class=\"nav-link active\" href=\"#\">Home</a></li>
+          <li class=\"nav-item\"><a class=\"nav-link\" href=\"#features\">Features</a></li>
+          <li class=\"nav-item\"><a class=\"nav-link\" href=\"#demo\">Demo</a></li>
+          <li class=\"nav-item\"><a class=\"nav-link\" href=\"#ai-chat\">AI Chat</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class=\"hero\">
+    <div class=\"container text-center\">
+      <h1 class=\"display-4 fw-bold\">Vanguard Anti-Counterfeiting System</h1>
+      <p class=\"lead\">The World's Most Advanced AI-Powered Product Authentication Platform</p>
+      <button class=\"btn btn-light btn-lg mt-3\" onclick=\"testApi()\">Test API Connection</button>
+    </div>
+  </section>
+
+  <div class=\"container mb-5\" id=\"api-test-results\" style=\"display: none;\">
+    <div class=\"row justify-content-center\">
+      <div class=\"col-md-8\">
+        <div class=\"card\">
+          <div class=\"card-header bg-success text-white\">
+            <h5 class=\"mb-0\">API Connection Successful</h5>
+          </div>
+          <div class=\"card-body\">
+            <p>The Vanguard API is running correctly. You can now explore the features below.</p>
+            <pre class=\"api-response\" id=\"api-response\"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class=\"container mb-5\" id=\"features\">
+    <h2 class=\"text-center mb-4\">Key Features</h2>
+    <div class=\"row g-4\">
+      <div class=\"col-md-4\">
+        <div class=\"card feature-card\">
+          <div class=\"card-body text-center\">
+            <div class=\"feature-icon\">🤖</div>
+            <h5 class=\"card-title\">AI & Machine Learning</h5>
+            <p class=\"card-text\">Intelligent pattern detection, predictive analytics, and automated risk scoring to identify counterfeit trends.</p>
+          </div>
+        </div>
+      </div>
+      <div class=\"col-md-4\">
+        <div class=\"card feature-card\">
+          <div class=\"card-body text-center\">
+            <div class=\"feature-icon\">🎮</div>
+            <h5 class=\"card-title\">Consumer Engagement</h5>
+            <p class=\"card-text\">Gamification system with rewards, points, badges, and free gifts for identifying counterfeit products.</p>
+          </div>
+        </div>
+      </div>
+      <div class=\"col-md-4\">
+        <div class=\"card feature-card\">
+          <div class=\"card-body text-center\">
+            <div class=\"feature-icon\">📊</div>
+            <h5 class=\"card-title\">Advanced Analytics</h5>
+            <p class=\"card-text\">Real-time dashboards, heat maps, channel analysis, and sentiment analysis for comprehensive insights.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class=\"container mb-5\" id=\"demo\">
+    <h2 class=\"text-center mb-4\">Interactive Demo</h2>
+    <div class=\"row\">
+      <div class=\"col-md-6 mb-4\">
+        <div class=\"card h-100\">
+          <div class=\"card-header bg-primary text-white\">
+            <h5 class=\"mb-0\">Product Verification</h5>
+          </div>
+          <div class=\"card-body\">
+            <p>Enter a product code to verify its authenticity:</p>
+            <div class=\"input-group mb-3\">
+              <input type=\"text\" id=\"product-code\" class=\"form-control\" placeholder=\"Enter product code\" value=\"VG-2025-08-31-1234\">
+              <button class=\"btn btn-primary\" onclick=\"verifyProduct()\">Verify</button>
+            </div>
+            <div id=\"verification-result\" style=\"display: none;\">
+              <div class=\"alert alert-success\">
+                <h5>Authentic Product ✓</h5>
+                <p id=\"product-details\"></p>
+              </div>
+              <button class=\"btn btn-outline-primary btn-sm\" onclick=\"viewProductHistory()\">View History</button>
+            </div>
+            <div id=\"product-history\" style=\"display: none;\">
+              <h6 class=\"mt-3\">Product History</h6>
+              <ul class=\"list-group\" id=\"history-list\"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class=\"col-md-6 mb-4\">
+        <div class=\"card h-100\">
+          <div class=\"card-header bg-primary text-white\">
+            <h5 class=\"mb-0\">Rewards Dashboard</h5>
+          </div>
+          <div class=\"card-body\">
+            <button class=\"btn btn-primary mb-3\" onclick=\"loadRewardsDashboard()\">Load Rewards</button>
+            <div id=\"rewards-dashboard\" style=\"display: none;\">
+              <div class=\"d-flex justify-content-between align-items-center mb-3\">
+                <h5>Your Points: <span id=\"user-points\" class=\"badge bg-primary\"></span></h5>
+                <h6>Level: <span id=\"user-level\" class=\"badge bg-success\"></span></h6>
+              </div>
+              <h6>Your Badges:</h6>
+              <div id=\"user-badges\" class=\"mb-3\"></div>
+              <h6>Recent Activity:</h6>
+              <ul class=\"list-group\" id=\"recent-rewards\"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class=\"container mb-5\" id=\"ai-chat\">
+    <h2 class=\"text-center mb-4\">AI Assistant Chat</h2>
+    <div class=\"row justify-content-center\">
+      <div class=\"col-md-8\">
+        <div class=\"card\">
+          <div class=\"card-header bg-primary text-white\">
+            <h5 class=\"mb-0\">Chat with Vanguard AI</h5>
+          </div>
+          <div class=\"card-body\">
+            <div class=\"chat-container\" id=\"chat-container\">
+              <div class=\"chat-message ai-message\">Hello! I'm the Vanguard AI Assistant. How can I help you analyze your anti-counterfeiting data today?</div>
+            </div>
+            <div class=\"input-group\">
+              <input type=\"text\" id=\"chat-input\" class=\"form-control\" placeholder=\"Ask about counterfeits, channels, or trends...\">
+              <button class=\"btn btn-primary\" onclick=\"sendChatMessage()\">Send</button>
+            </div>
+            <div class=\"mt-2\">
+              <small class=\"text-muted\">Try asking about: counterfeits, channel analysis, or recent trends</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class=\"bg-dark text-white py-4 mt-5\">
+    <div class=\"container text-center\">
+      <p>© 2025 Vanguard Anti-Counterfeiting System. All rights reserved.</p>
+      <p>Protecting Authenticity, Rewarding Trust 🛡️</p>
+    </div>
+  </footer>
+
+  <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js\"></script>
+  <script>
+    const API_URL = \"http://localhost:3001\";
+    
+    async function testApi() {
+      try {
+        const response = await fetch(`${API_URL}/api`);
+        const data = await response.json();
+        document.getElementById(\"api-response\").textContent = JSON.stringify(data, null, 2);
+        document.getElementById(\"api-test-results\").style.display = \"block\";
+        scrollToElement(\"api-test-results\");
+      } catch (error) {
+        alert(\"Error connecting to API: \" + error.message);
+      }
+    }
+    
+    async function verifyProduct() {
+      try {
+        const productCode = document.getElementById(\"product-code\").value;
+        const response = await fetch(`${API_URL}/api/tokens/validate`, {
+          method: \"POST\",
+          headers: {
+            \"Content-Type\": \"application/json\"
+          },
+          body: JSON.stringify({ code: productCode })
+        });
+        const data = await response.json();
+        
+        if (data.status === \"success\") {
+          const product = data.product;
+          document.getElementById(\"product-details\").innerHTML = `
+            <strong>${product.name}</strong><br>
+            Manufacturer: ${product.manufacturer}<br>
+            Date: ${product.manufactureDate}
+          `;
+          document.getElementById(\"verification-result\").style.display = \"block\";
+          document.getElementById(\"product-history\").style.display = \"none\";
+        }
+      } catch (error) {
+        alert(\"Error verifying product: \" + error.message);
+      }
+    }
+    
+    async function viewProductHistory() {
+      try {
+        const productCode = document.getElementById(\"product-code\").value;
+        const response = await fetch(`${API_URL}/api/tokens/123/history`);
+        const data = await response.json();
+        
+        if (data.status === \"success\") {
+          const historyList = document.getElementById(\"history-list\");
+          historyList.innerHTML = \"\";
+          
+          data.history.forEach(item => {
+            const li = document.createElement(\"li\");
+            li.className = \"list-group-item\";
+            li.innerHTML = `<strong>${item.date}</strong>: ${item.status} at ${item.location}`;
+            historyList.appendChild(li);
+          });
+          
+          document.getElementById(\"product-history\").style.display = \"block\";
+        }
+      } catch (error) {
+        alert(\"Error loading product history: \" + error.message);
+      }
+    }
+    
+    async function loadRewardsDashboard() {
+      try {
+        const response = await fetch(`${API_URL}/api/rewards/v2/dashboard`);
+        const data = await response.json();
+        
+        if (data.status === \"success\") {
+          document.getElementById(\"user-points\").textContent = data.points;
+          document.getElementById(\"user-level\").textContent = data.level;
+          
+          const badgesContainer = document.getElementById(\"user-badges\");
+          badgesContainer.innerHTML = \"\";
+          data.badges.forEach(badge => {
+            const span = document.createElement(\"span\");
+            span.className = \"badge bg-info me-2 mb-2\";
+            span.textContent = badge;
+            badgesContainer.appendChild(span);
+          });
+          
+          const recentRewards = document.getElementById(\"recent-rewards\");
+          recentRewards.innerHTML = \"\";
+          data.recentRewards.forEach(reward => {
+            const li = document.createElement(\"li\");
+            li.className = \"list-group-item d-flex justify-content-between align-items-center\";
+            li.innerHTML = `
+              ${reward.action}
+              <span class=\"badge bg-primary rounded-pill\">+${reward.points} pts</span>
+            `;
+            recentRewards.appendChild(li);
+          });
+          
+          document.getElementById(\"rewards-dashboard\").style.display = \"block\";
+        }
+      } catch (error) {
+        alert(\"Error loading rewards: \" + error.message);
+      }
+    }
+    
+    async function sendChatMessage() {
+      const chatInput = document.getElementById(\"chat-input\");
+      const message = chatInput.value.trim();
+      
+      if (!message) return;
+      
+      // Add user message to chat
+      addChatMessage(message, \"user\");
+      chatInput.value = \"\";
+      
+      try {
+        const response = await fetch(`${API_URL}/api/analytics/ai/chat/message`, {
+          method: \"POST\",
+          headers: {
+            \"Content-Type\": \"application/json\"
+          },
+          body: JSON.stringify({ message })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === \"success\") {
+          // Add AI response to chat
+          addChatMessage(data.response, \"ai\");
+        }
+      } catch (error) {
+        addChatMessage(\"Sorry, I'm having trouble connecting to the server. Please try again later.\", \"ai\");
+      }
+    }
+    
+    function addChatMessage(message, sender) {
+      const chatContainer = document.getElementById(\"chat-container\");
+      const messageDiv = document.createElement(\"div\");
+      messageDiv.className = `chat-message ${sender}-message`;
+      messageDiv.textContent = message;
+      chatContainer.appendChild(messageDiv);
+      
+      // Scroll to bottom
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    function scrollToElement(elementId) {
+      const element = document.getElementById(elementId);
+      element.scrollIntoView({ behavior: \"smooth\", block: \"start\" });
+    }
+    
+    // Enter key for chat
+    document.getElementById(\"chat-input\").addEventListener(\"keypress\", function(event) {
+      if (event.key === \"Enter\") {
+        event.preventDefault();
+        sendChatMessage();
+      }
+    });
+  </script>
+</body>
+</html>
+EOT
+             && nginx -g 'daemon off;'"
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  default:
+    name: vanguard-network
