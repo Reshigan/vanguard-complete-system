@@ -132,9 +132,9 @@ The system comes with pre-configured test accounts:
 
 Once deployed, the system is available at:
 
-- **Web Interface**: http://localhost
-- **API Endpoints**: http://localhost:3000/api
-- **Health Check**: http://localhost/health
+- **Web Interface**: http://localhost:8080
+- **API Endpoints**: http://localhost:3001/api
+- **Health Check**: http://localhost:8080/health
 
 ## Management Commands
 
@@ -227,7 +227,7 @@ docker run --rm -v vanguard-complete-system_postgres_data:/data -v $(pwd):/backu
 ### Monitoring
 ```bash
 # Check service health
-curl http://localhost/api/health
+curl http://localhost:8080/api/health
 
 # View resource usage
 docker stats

@@ -14,7 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./server/database/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432"
+      - "5433:5432"  # Changed from 5432:5432 to avoid port conflict
     networks:
       - vanguard-network
     restart: unless-stopped
@@ -32,7 +32,7 @@ services:
     volumes:
       - redis_data:/data
     ports:
-      - "6379:6379"
+      - "6380:6379"  # Changed from 6379:6379 to avoid port conflict
     networks:
       - vanguard-network
     restart: unless-stopped
@@ -60,7 +60,7 @@ services:
       - app_logs:/app/logs
       - app_data:/app/server/data
     ports:
-      - "3000:3000"
+      - "3001:3000"  # Changed from 3000:3000 to avoid port conflict
     networks:
       - vanguard-network
     depends_on:
@@ -108,8 +108,8 @@ services:
       - ./client/dist:/usr/share/nginx/html
       - nginx_logs:/var/log/nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"  # Changed from 80:80 to avoid port conflict
+      - "8443:443"  # Changed from 443:443 to avoid port conflict
     networks:
       - vanguard-network
     depends_on:

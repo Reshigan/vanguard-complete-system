@@ -120,14 +120,14 @@ fi
 sleep 15
 
 # Check application
-if curl -f http://localhost:3000/api/health &> /dev/null; then
+if curl -f http://localhost:3001/api/health &> /dev/null; then
     success "Application is healthy"
 else
     warning "Application health check failed, but continuing..."
 fi
 
 # Check Nginx
-if curl -f http://localhost/health &> /dev/null; then
+if curl -f http://localhost:8080/health &> /dev/null; then
     success "Nginx is healthy"
 else
     warning "Nginx health check failed, but continuing..."
@@ -156,10 +156,10 @@ echo ""
 echo -e "${GREEN}Vanguard Anti-Counterfeiting System has been successfully deployed with Docker!${NC}"
 echo ""
 echo "Access the application at:"
-echo -e "  ${GREEN}http://localhost${NC}"
+echo -e "  ${GREEN}http://localhost:8080${NC}"
 echo ""
 echo "API is running at:"
-echo -e "  ${BLUE}http://localhost:3000/api${NC}"
+echo -e "  ${BLUE}http://localhost:3001/api${NC}"
 echo ""
 echo "Default admin credentials:"
 echo -e "  ${YELLOW}Email: admin@vanguard.local${NC}"
