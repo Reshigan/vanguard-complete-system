@@ -152,7 +152,7 @@ const Scanner = () => {
       {/* NXT Tag Scanner */}
       <div className="card mb-6">
         <div className="text-center">
-          <div className={`w-32 h-32 mx-auto mb-6 rounded-full border-4 border-dashed border-gray-300 flex items-center justify-center ${isScanning ? 'nfc-pulse border-blue-500' : ''}`}>
+          <div className={`w-32 h-32 mx-auto mb-6 rounded-full border-4 border-dashed border-gray-300 flex items-center justify-center ${isScanning ? 'gonxt-pulse border-blue-500' : ''}`}>
             {isScanning ? (
               <LoadingSpinner size="lg" />
             ) : (

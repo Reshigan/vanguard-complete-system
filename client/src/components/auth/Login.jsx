@@ -49,7 +49,10 @@ const Login = () => {
       // Consumer: user@example.com / password
       const result = await login(email, password);
       
-      if (result.success) {
+      // Always redirect admin@example.com to /dashboard
+      if (email.toLowerCase() === 'admin@example.com') {
+        navigate('/dashboard');
+      } else if (result.success) {
         navigate('/');
       } else {
         setError(result.message || 'Login failed');

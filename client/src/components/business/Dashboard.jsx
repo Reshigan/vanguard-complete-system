@@ -70,18 +70,18 @@ const channelPerformance = [
 const Dashboard = () => {
   return (
     <BusinessLayout title="Dashboard">
-      <Box sx={{ flexGrow: 1 }}>
+  <Box sx={{ flexGrow: 1, px: { xs: 0, sm: 2 } }}>
         {/* Key Statistics */}
-        <Grid container spacing={3} sx={{ mb: 4 }}>
+  <Grid container spacing={2} sx={{ mb: 2 }}>
           {stats.map((stat, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Paper
                 elevation={0}
                 sx={{
-                  p: 2,
+                  p: { xs: 1.5, sm: 2 },
                   display: 'flex',
                   flexDirection: 'column',
-                  height: 120,
+                  height: { xs: 100, sm: 120 },
                   borderRadius: 2,
                   border: '1px solid',
                   borderColor: 'divider',
@@ -112,10 +112,10 @@ const Dashboard = () => {
           ))}
         </Grid>
 
-        <Grid container spacing={3}>
+  <Grid container spacing={2}>
           {/* Recent Activities */}
           <Grid item xs={12} md={6}>
-            <Card elevation={0} sx={{ borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+            <Card elevation={0} sx={{ borderRadius: 2, border: '1px solid', borderColor: 'divider', minWidth: 0 }}>
               <CardHeader 
                 title="Recent Activities" 
                 titleTypographyProps={{ variant: 'h6' }}
@@ -188,7 +188,7 @@ const Dashboard = () => {
 
           {/* Top Products */}
           <Grid item xs={12} md={6}>
-            <Card elevation={0} sx={{ borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+            <Card elevation={0} sx={{ borderRadius: 2, border: '1px solid', borderColor: 'divider', minWidth: 0 }}>
               <CardHeader 
                 title="Top Products" 
                 titleTypographyProps={{ variant: 'h6' }}
@@ -197,49 +197,51 @@ const Dashboard = () => {
                 }
               />
               <Divider />
-              <CardContent>
-                <TableContainer>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Product</TableCell>
-                        <TableCell align="right">Authentications</TableCell>
-                        <TableCell align="right">Success Rate</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {topProducts.map((product) => (
-                        <TableRow key={product.id}>
-                          <TableCell component="th" scope="row">
-                            {product.name}
-                          </TableCell>
-                          <TableCell align="right">{product.authentications.toLocaleString()}</TableCell>
-                          <TableCell align="right">
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                              <Typography variant="body2" sx={{ mr: 1 }}>
-                                {product.success}%
-                              </Typography>
-                              {product.success >= 98 ? (
-                                <CheckCircleIcon fontSize="small" color="success" />
-                              ) : product.success >= 95 ? (
-                                <CheckCircleIcon fontSize="small" color="info" />
-                              ) : (
-                                <WarningIcon fontSize="small" color="warning" />
-                              )}
-                            </Box>
-                          </TableCell>
+              <CardContent sx={{ p: 0 }}>
+                <Box sx={{ width: '100%', overflowX: 'auto' }}>
+                  <TableContainer>
+                    <Table size="small">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Product</TableCell>
+                          <TableCell align="right">Authentications</TableCell>
+                          <TableCell align="right">Success Rate</TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                      </TableHead>
+                      <TableBody>
+                        {topProducts.map((product) => (
+                          <TableRow key={product.id}>
+                            <TableCell component="th" scope="row">
+                              {product.name}
+                            </TableCell>
+                            <TableCell align="right">{product.authentications.toLocaleString()}</TableCell>
+                            <TableCell align="right">
+                              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                <Typography variant="body2" sx={{ mr: 1 }}>
+                                  {product.success}%
+                                </Typography>
+                                {product.success >= 98 ? (
+                                  <CheckCircleIcon fontSize="small" color="success" />
+                                ) : product.success >= 95 ? (
+                                  <CheckCircleIcon fontSize="small" color="info" />
+                                ) : (
+                                  <WarningIcon fontSize="small" color="warning" />
+                                )}
+                              </Box>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
 
           {/* Channel Performance */}
           <Grid item xs={12}>
-            <Card elevation={0} sx={{ borderRadius: 2, border: '1px solid', borderColor: 'divider', mt: 3 }}>
+            <Card elevation={0} sx={{ borderRadius: 2, border: '1px solid', borderColor: 'divider', mt: 3, minWidth: 0 }}>
               <CardHeader 
                 title="Distribution Channel Performance" 
                 titleTypographyProps={{ variant: 'h6' }}
@@ -249,13 +251,13 @@ const Dashboard = () => {
               />
               <Divider />
               <CardContent>
-                <Grid container spacing={2}>
+                <Grid container spacing={1}>
                   {channelPerformance.map((channel) => (
-                    <Grid item xs={12} md={6} lg={4} key={channel.id}>
+                    <Grid item xs={12} sm={6} md={4} key={channel.id}>
                       <Paper
                         elevation={0}
                         sx={{
-                          p: 2,
+                          p: { xs: 1.5, sm: 2 },
                           borderRadius: 2,
                           border: '1px solid',
                           borderColor: 'divider',
