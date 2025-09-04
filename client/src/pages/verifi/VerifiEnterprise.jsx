@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VerifiWordmark } from '../../assets/verifi-brand';
+import { VerifiWordmark } from '../../assets/verifi-brand.jsx';
 import AnalyticsDashboard from '../../components/verifi/AnalyticsDashboard';
 import BatchManagement from '../../components/verifi/BatchManagement';
 import AIInsights from '../../components/verifi/AIInsights';

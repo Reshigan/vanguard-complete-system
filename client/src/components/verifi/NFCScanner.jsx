@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VerifiLogo, VerifiBrand } from '../../assets/verifi-brand';
+import { VerifiLogo, VerifiBrand } from '../../assets/verifi-brand.jsx';
 import { 
   Smartphone, 
   CheckCircle, 

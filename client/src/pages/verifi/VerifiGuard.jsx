@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VerifiWordmark, VerifiBrand } from '../../assets/verifi-brand';
+import { VerifiWordmark, VerifiBrand } from '../../assets/verifi-brand.jsx';
 import NFCScanner from '../../components/verifi/NFCScanner';
 import RewardsProgram from '../../components/verifi/RewardsProgram';
 import ResponsibleDrinking from '../../components/verifi/ResponsibleDrinking';

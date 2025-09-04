@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { VerifiWordmark } from '../../assets/verifi-brand';
+import { VerifiWordmark } from '../../assets/verifi-brand.jsx';
 import AggregateAnalytics from '../../components/verifi/AggregateAnalytics';
 import TrendAnalysis from '../../components/verifi/TrendAnalysis';
 import InterventionManagement from '../../components/verifi/InterventionManagement';
