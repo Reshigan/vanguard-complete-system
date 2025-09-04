@@ -1,3 +1,43 @@
+// Verifi Wordmark Component
+export const VerifiWordmark = ({ size = 'md', className = '' }) => {
+  const sizes = {
+    sm: { fontSize: '1.5rem', logoSize: 24 },
+    md: { fontSize: '2rem', logoSize: 32 },
+    lg: { fontSize: '2.5rem', logoSize: 40 },
+    xl: { fontSize: '3rem', logoSize: 48 },
+  };
+
+  const currentSize = sizes[size] || sizes.md;
+
+  return (
+    <div className={`flex items-center gap-3 ${className}`}>
+      <VerifiLogo size={currentSize.logoSize} />
+      <span
+        style={{
+          fontSize: currentSize.fontSize,
+          fontWeight: 700,
+          color: '#334155',
+          fontFamily: 'Inter, system-ui, sans-serif',
+        }}
+      >
+        Verifi
+      </span>
+    </div>
+  );
+};
+
+// Utility functions for brand consistency
+export const getBrandColor = (color, shade = 500) => {
+  return VerifiBrand.colors[color]?.[shade] || color;
+};
+
+export const getBrandSpacing = (size) => {
+  return VerifiBrand.spacing?.[size] || size;
+};
+
+export const getBrandRadius = (size) => {
+  return VerifiBrand.borderRadius?.[size] || size;
+};
 // Verifi Brand Identity System
 export const VerifiBrand = {
   // Brand Colors
