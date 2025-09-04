@@ -47,4 +47,9 @@ router.get('/:id', reportController.getReport);
 router.put('/:id/status', authorize('manufacturer', 'admin'), reportController.updateReportStatus);
 router.get('/manufacturer/all', authorize('manufacturer', 'admin'), reportController.getManufacturerReports);
 
+// Business Analytics routes
+router.get('/comprehensive', authenticate, reportController.getComprehensiveReport);
+router.get('/south-africa-metrics', authenticate, reportController.getSouthAfricaMetrics);
+router.get('/export', authenticate, reportController.exportReport);
+
 module.exports = router;
