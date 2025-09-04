@@ -1,0 +1,71 @@
+# Verifi AI Production Dockerfile
+# Multi-stage build for optimized production image
+
+# Stage 1: Build stage
+FROM node:18-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY server/package*.json ./server/
+COPY blockchain/package*.json ./blockchain/
+
+# Install dependencies
+RUN cd server && npm ci --only=production && npm cache clean --force
+RUN cd blockchain && npm ci --only=production && npm cache clean --force
+
+# Copy source code
+COPY server/ ./server/
+COPY blockchain/ ./blockchain/
+COPY client/ ./client/
+
+# Build blockchain contracts
+RUN cd blockchain && npm run compile
+
+# Stage 2: Production stage
+FROM node:18-alpine AS production
+
+# Install system dependencies
+RUN apk add --no-cache \
+    postgresql-client \
+    redis \
+    curl \
+    dumb-init
+
+# Create app user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S verifi -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy built application from builder stage
+COPY --from=builder --chown=verifi:nodejs /app ./
+
+# Copy additional configuration files
+COPY docker/production/entrypoint.sh ./entrypoint.sh
+COPY docker/production/healthcheck.sh ./healthcheck.sh
+
+# Make scripts executable
+RUN chmod +x ./entrypoint.sh ./healthcheck.sh
+
+# Create necessary directories
+RUN mkdir -p /app/logs /app/uploads /app/temp && \
+    chown -R verifi:nodejs /app
+
+# Switch to non-root user
+USER verifi
+
+# Expose ports
+EXPOSE 3001 3002
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD ./healthcheck.sh
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start the application
+CMD ["./entrypoint.sh"]

@@ -1,7 +1,7 @@
 {
-  "name": "authentiguard-server",
+  "name": "verifi-ai-server",
   "version": "1.0.0",
-  "description": "AuthentiGuard Backend API Server",
+  "description": "Verifi AI Backend API Server",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
