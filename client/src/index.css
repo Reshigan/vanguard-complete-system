@@ -83,7 +83,7 @@
   animation: nfc-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@keyframes nfc-pulse {
+@keyframes nxt-pulse {
   0%, 100% {
     opacity: 1;
     transform: scale(1);

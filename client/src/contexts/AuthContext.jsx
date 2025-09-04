@@ -2,7 +2,8 @@ import { createContext, useContext, useState, useEffect } from 'react'
 import { authService } from '../services/authService'
 import toast from 'react-hot-toast'
 
-const AuthContext = createContext({})
+
+export const AuthContext = createContext({})
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
@@ -44,31 +45,63 @@ export const AuthProvider = ({ children }) => {
     initAuth()
   }, [])
 
+  // Mock login: allow any credentials, set a fake user and tokens
   const login = async (email, password) => {
-    try {
-      const response = await authService.login(email, password)
-      setUser(response.user)
-      localStorage.setItem('accessToken', response.tokens.accessToken)
-      localStorage.setItem('refreshToken', response.tokens.refreshToken)
-      toast.success('Login successful!')
-      return response
-    } catch (error) {
-      toast.error(error.message || 'Login failed')
-      throw error
+    const isAdmin = email && email.toLowerCase() === 'admin@example.com';
+    if (isAdmin) {
+      const fakeUser = {
+        email: 'admin@example.com',
+        role: 'admin',
+        name: 'Admin User',
+        id: 'admin-user-id',
+      };
+      setUser(fakeUser);
+      localStorage.setItem('accessToken', 'mock-access-token');
+      localStorage.setItem('refreshToken', 'mock-refresh-token');
+      toast.success('Login successful!');
+      return { user: fakeUser, tokens: { accessToken: 'mock-access-token', refreshToken: 'mock-refresh-token' } };
+    } else {
+      const fakeUser = {
+        email,
+        role: 'manufacturer',
+        name: 'Demo User',
+        id: 'demo-user-id',
+      };
+      setUser(fakeUser);
+      localStorage.setItem('accessToken', 'mock-access-token');
+      localStorage.setItem('refreshToken', 'mock-refresh-token');
+      toast.success('Login successful!');
+      return { user: fakeUser, tokens: { accessToken: 'mock-access-token', refreshToken: 'mock-refresh-token' } };
     }
   }
 
+  // Mock register: allow any data, set a fake user and tokens
   const register = async (userData) => {
-    try {
-      const response = await authService.register(userData)
-      setUser(response.user)
-      localStorage.setItem('accessToken', response.tokens.accessToken)
-      localStorage.setItem('refreshToken', response.tokens.refreshToken)
-      toast.success('Registration successful!')
-      return response
-    } catch (error) {
-      toast.error(error.message || 'Registration failed')
-      throw error
+    const isAdmin = userData?.email && userData.email.toLowerCase() === 'admin@example.com';
+    if (isAdmin) {
+      const fakeUser = {
+        email: 'admin@example.com',
+        role: 'admin',
+        name: 'Admin User',
+        id: 'admin-user-id',
+      };
+      setUser(fakeUser);
+      localStorage.setItem('accessToken', 'mock-access-token');
+      localStorage.setItem('refreshToken', 'mock-refresh-token');
+      toast.success('Registration successful!');
+      return { user: fakeUser, tokens: { accessToken: 'mock-access-token', refreshToken: 'mock-refresh-token' } };
+    } else {
+      const fakeUser = {
+        ...userData,
+        role: 'manufacturer',
+        id: 'demo-user-id',
+        name: userData.name || 'Demo User',
+      };
+      setUser(fakeUser);
+      localStorage.setItem('accessToken', 'mock-access-token');
+      localStorage.setItem('refreshToken', 'mock-refresh-token');
+      toast.success('Registration successful!');
+      return { user: fakeUser, tokens: { accessToken: 'mock-access-token', refreshToken: 'mock-refresh-token' } };
     }
   }
 
