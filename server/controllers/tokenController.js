@@ -16,18 +16,18 @@ const validateToken = async (req, res) => {
     }
 
     // Find token in database
-    const token = await db('nfc_tokens')
-      .join('products', 'nfc_tokens.product_id', 'products.id')
-      .join('manufacturers', 'nfc_tokens.manufacturer_id', 'manufacturers.id')
+    const token = await db('nxt_tokens')
+      .join('products', 'nxt_tokens.product_id', 'products.id')
+      .join('manufacturers', 'nxt_tokens.manufacturer_id', 'manufacturers.id')
       .select(
-        'nfc_tokens.*',
+        'nxt_tokens.*',
         'products.name as product_name',
         'products.category',
         'products.alcohol_content',
         'products.volume',
         'manufacturers.name as manufacturer_name'
       )
-      .where('nfc_tokens.token_hash', tokenHash)
+      .where('nxt_tokens.token_hash', tokenHash)
       .first();
 
     if (!token) {
@@ -91,10 +91,10 @@ const validateToken = async (req, res) => {
     }
 
     // Token is valid - return success but don't mark as validated yet
-    // The client needs to physically destroy the NFC tag to complete validation
+    // The client needs to physically destroy the NXT Tag tag to complete validation
     res.status(200).json({
       success: true,
-      message: 'Token is authentic. Please tear the NFC sticker to complete validation.',
+      message: 'Token is authentic. Please tear the NXT Tag sticker to complete validation.',
       token: {
         id: token.id,
         productName: token.product_name,
@@ -142,15 +142,15 @@ const invalidateToken = async (req, res) => {
       });
     }
 
-    const token = await db('nfc_tokens')
-      .join('products', 'nfc_tokens.product_id', 'products.id')
-      .join('manufacturers', 'nfc_tokens.manufacturer_id', 'manufacturers.id')
+    const token = await db('nxt_tokens')
+      .join('products', 'nxt_tokens.product_id', 'products.id')
+      .join('manufacturers', 'nxt_tokens.manufacturer_id', 'manufacturers.id')
       .select(
-        'nfc_tokens.*',
+        'nxt_tokens.*',
         'products.name as product_name',
         'manufacturers.name as manufacturer_name'
       )
-      .where('nfc_tokens.token_hash', tokenHash)
+      .where('nxt_tokens.token_hash', tokenHash)
       .first();
 
     if (!token) {
@@ -168,7 +168,7 @@ const invalidateToken = async (req, res) => {
     }
 
     // Update token status to validated
-    await db('nfc_tokens')
+    await db('nxt_tokens')
       .where('id', token.id)
       .update({
         status: 'validated',
@@ -220,22 +220,22 @@ const getTokenInfo = async (req, res) => {
   try {
     const { tokenHash } = req.params;
 
-    const token = await db('nfc_tokens')
-      .join('products', 'nfc_tokens.product_id', 'products.id')
-      .join('manufacturers', 'nfc_tokens.manufacturer_id', 'manufacturers.id')
+    const token = await db('nxt_tokens')
+      .join('products', 'nxt_tokens.product_id', 'products.id')
+      .join('manufacturers', 'nxt_tokens.manufacturer_id', 'manufacturers.id')
       .select(
-        'nfc_tokens.id',
-        'nfc_tokens.batch_number',
-        'nfc_tokens.production_date',
-        'nfc_tokens.expiry_date',
-        'nfc_tokens.status',
+        'nxt_tokens.id',
+        'nxt_tokens.batch_number',
+        'nxt_tokens.production_date',
+        'nxt_tokens.expiry_date',
+        'nxt_tokens.status',
         'products.name as product_name',
         'products.category',
         'products.description',
         'manufacturers.name as manufacturer_name',
         'manufacturers.country'
       )
-      .where('nfc_tokens.token_hash', tokenHash)
+      .where('nxt_tokens.token_hash', tokenHash)
       .first();
 
     if (!token) {
@@ -336,7 +336,7 @@ const createBatchTokens = async (req, res) => {
         });
       }
 
-      await db('nfc_tokens').insert(currentBatch);
+      await db('nxt_tokens').insert(currentBatch);
       tokens.push(...currentBatch);
     }
 
@@ -379,29 +379,29 @@ const getMyTokens = async (req, res) => {
     const { page = 1, limit = 50, status, productId } = req.query;
     const offset = (page - 1) * limit;
 
-    let query = db('nfc_tokens')
-      .join('products', 'nfc_tokens.product_id', 'products.id')
+    let query = db('nxt_tokens')
+      .join('products', 'nxt_tokens.product_id', 'products.id')
       .select(
-        'nfc_tokens.*',
+        'nxt_tokens.*',
         'products.name as product_name',
         'products.category'
       )
-      .where('nfc_tokens.manufacturer_id', req.user.manufacturer_id)
+      .where('nxt_tokens.manufacturer_id', req.user.manufacturer_id)
       .limit(limit)
       .offset(offset)
-      .orderBy('nfc_tokens.created_at', 'desc');
+      .orderBy('nxt_tokens.created_at', 'desc');
 
     if (status) {
-      query = query.where('nfc_tokens.status', status);
+      query = query.where('nxt_tokens.status', status);
     }
 
     if (productId) {
-      query = query.where('nfc_tokens.product_id', productId);
+      query = query.where('nxt_tokens.product_id', productId);
     }
 
     const tokens = await query;
 
-    const totalQuery = db('nfc_tokens')
+    const totalQuery = db('nxt_tokens')
       .where('manufacturer_id', req.user.manufacturer_id)
       .count('* as count');
 

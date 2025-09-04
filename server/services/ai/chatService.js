@@ -147,7 +147,7 @@ class AIChatService {
         },
         emerging_threats: [
           'Sophisticated QR code cloning',
-          'NFC tag duplication',
+          'NXT Tag tag duplication',
           'Cross-border smuggling networks'
         ]
       }

@@ -45,8 +45,8 @@ exports.up = function(knex) {
       table.index(['role']);
     })
     
-    // NFC Tokens table
-    .createTable('nfc_tokens', table => {
+    // NXT Tag Tokens table
+    .createTable('nxt_tokens', table => {
       table.uuid('id').primary();
       table.string('token_hash').unique().notNullable();
       table.uuid('product_id').references('id').inTable('products').onDelete('CASCADE');
@@ -70,7 +70,7 @@ exports.up = function(knex) {
     // Supply Chain Events table
     .createTable('supply_chain_events', table => {
       table.uuid('id').primary();
-      table.uuid('token_id').references('id').inTable('nfc_tokens').onDelete('CASCADE');
+      table.uuid('token_id').references('id').inTable('nxt_tokens').onDelete('CASCADE');
       table.enu('event_type', ['production', 'distribution', 'retail', 'validation', 'counterfeit_report', 'validation_attempt', 'report_status_update']).notNullable();
       table.uuid('stakeholder_id').references('id').inTable('users').onDelete('SET NULL');
       table.enu('stakeholder_type', ['manufacturer', 'distributor', 'retailer', 'consumer', 'admin']).notNullable();
@@ -87,7 +87,7 @@ exports.up = function(knex) {
     // Counterfeit Reports table
     .createTable('counterfeit_reports', table => {
       table.uuid('id').primary();
-      table.uuid('token_id').references('id').inTable('nfc_tokens').onDelete('CASCADE');
+      table.uuid('token_id').references('id').inTable('nxt_tokens').onDelete('CASCADE');
       table.uuid('reporter_id').references('id').inTable('users').onDelete('SET NULL');
       table.specificType('location', 'POINT');
       table.specificType('photos', 'TEXT[]');
@@ -123,7 +123,7 @@ exports.down = function(knex) {
     .dropTableIfExists('refresh_tokens')
     .dropTableIfExists('counterfeit_reports')
     .dropTableIfExists('supply_chain_events')
-    .dropTableIfExists('nfc_tokens')
+    .dropTableIfExists('nxt_tokens')
     .dropTableIfExists('products')
     .dropTableIfExists('users')
     .dropTableIfExists('manufacturers');

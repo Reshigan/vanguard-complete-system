@@ -41,7 +41,7 @@ const Reports = () => {
         rewardAmount: 0,
         location: 'Chicago, IL',
         createdAt: '2024-08-15T09:45:00Z',
-        description: 'Initial concern about NFC sticker placement'
+        description: 'Initial concern about NXT Tag sticker placement'
       }
     ]
 

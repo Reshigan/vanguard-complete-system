@@ -15,7 +15,7 @@ const reportCounterfeit = async (req, res) => {
     }
 
     // Find the token
-    const token = await db('nfc_tokens')
+    const token = await db('nxt_tokens')
       .where('token_hash', tokenHash)
       .first();
 
@@ -93,9 +93,9 @@ const getMyReports = async (req, res) => {
     const offset = (page - 1) * limit;
 
     let query = db('counterfeit_reports')
-      .join('nfc_tokens', 'counterfeit_reports.token_id', 'nfc_tokens.id')
-      .join('products', 'nfc_tokens.product_id', 'products.id')
-      .join('manufacturers', 'nfc_tokens.manufacturer_id', 'manufacturers.id')
+      .join('nxt_tokens', 'counterfeit_reports.token_id', 'nxt_tokens.id')
+      .join('products', 'nxt_tokens.product_id', 'products.id')
+      .join('manufacturers', 'nxt_tokens.manufacturer_id', 'manufacturers.id')
       .select(
         'counterfeit_reports.*',
         'products.name as product_name',
@@ -147,9 +147,9 @@ const getReport = async (req, res) => {
     const { id } = req.params;
 
     const report = await db('counterfeit_reports')
-      .join('nfc_tokens', 'counterfeit_reports.token_id', 'nfc_tokens.id')
-      .join('products', 'nfc_tokens.product_id', 'products.id')
-      .join('manufacturers', 'nfc_tokens.manufacturer_id', 'manufacturers.id')
+      .join('nxt_tokens', 'counterfeit_reports.token_id', 'nxt_tokens.id')
+      .join('products', 'nxt_tokens.product_id', 'products.id')
+      .join('manufacturers', 'nxt_tokens.manufacturer_id', 'manufacturers.id')
       .leftJoin('users', 'counterfeit_reports.reporter_id', 'users.id')
       .select(
         'counterfeit_reports.*',
@@ -157,8 +157,8 @@ const getReport = async (req, res) => {
         'products.category',
         'manufacturers.name as manufacturer_name',
         'users.email as reporter_email',
-        'nfc_tokens.batch_number',
-        'nfc_tokens.production_date'
+        'nxt_tokens.batch_number',
+        'nxt_tokens.production_date'
       )
       .where('counterfeit_reports.id', id)
       .first();
@@ -269,17 +269,17 @@ const getManufacturerReports = async (req, res) => {
     const offset = (page - 1) * limit;
 
     let query = db('counterfeit_reports')
-      .join('nfc_tokens', 'counterfeit_reports.token_id', 'nfc_tokens.id')
-      .join('products', 'nfc_tokens.product_id', 'products.id')
+      .join('nxt_tokens', 'counterfeit_reports.token_id', 'nxt_tokens.id')
+      .join('products', 'nxt_tokens.product_id', 'products.id')
       .leftJoin('users', 'counterfeit_reports.reporter_id', 'users.id')
       .select(
         'counterfeit_reports.*',
         'products.name as product_name',
         'products.category',
         'users.email as reporter_email',
-        'nfc_tokens.batch_number'
+        'nxt_tokens.batch_number'
       )
-      .where('nfc_tokens.manufacturer_id', req.user.manufacturer_id)
+      .where('nxt_tokens.manufacturer_id', req.user.manufacturer_id)
       .limit(limit)
       .offset(offset)
       .orderBy('counterfeit_reports.created_at', 'desc');
@@ -300,8 +300,8 @@ const getManufacturerReports = async (req, res) => {
 
     // Get summary statistics
     const stats = await db('counterfeit_reports')
-      .join('nfc_tokens', 'counterfeit_reports.token_id', 'nfc_tokens.id')
-      .where('nfc_tokens.manufacturer_id', req.user.manufacturer_id)
+      .join('nxt_tokens', 'counterfeit_reports.token_id', 'nxt_tokens.id')
+      .where('nxt_tokens.manufacturer_id', req.user.manufacturer_id)
       .select(
         db.raw('COUNT(*) as total'),
         db.raw('COUNT(CASE WHEN status = ? THEN 1 END) as pending', ['pending']),

@@ -115,7 +115,7 @@ describe('Vanguard Anti-Counterfeiting System - Comprehensive Tests', () => {
     beforeEach(async () => {
       // Create test token
       testTokenId = uuidv4();
-      await knex('nfc_tokens').insert({
+      await knex('nxt_tokens').insert({
         id: testTokenId,
         token_hash: `TEST-${Date.now()}`,
         product_id: testProductId,
@@ -142,7 +142,7 @@ describe('Vanguard Anti-Counterfeiting System - Comprehensive Tests', () => {
     test('Should detect counterfeit token', async () => {
       // First validation
       const tokenHash = `TEST-DUPLICATE-${Date.now()}`;
-      await knex('nfc_tokens').insert({
+      await knex('nxt_tokens').insert({
         id: uuidv4(),
         token_hash: tokenHash,
         product_id: testProductId,

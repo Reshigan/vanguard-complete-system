@@ -67,7 +67,7 @@ class DataGenerator {
       'suspicious_patterns',
       'counterfeit_reports',
       'supply_chain_events',
-      'nfc_tokens',
+      'nxt_tokens',
       'refresh_tokens'
     ];
 
@@ -303,9 +303,9 @@ class DataGenerator {
         
         // Create token
         const tokenId = uuidv4();
-        const tokenHash = `NFC-${currentDate.getFullYear()}-${String(day).padStart(3, '0')}-${String(i).padStart(4, '0')}`;
+        const tokenHash = `NXT Tag-${currentDate.getFullYear()}-${String(day).padStart(3, '0')}-${String(i).padStart(4, '0')}`;
         
-        await knex('nfc_tokens').insert({
+        await knex('nxt_tokens').insert({
           id: tokenId,
           token_hash: tokenHash,
           product_id: product.id,
@@ -338,7 +338,7 @@ class DataGenerator {
         
         if (isCounterfeit) {
           // Counterfeit scenario
-          await knex('nfc_tokens').where('id', tokenId).update({
+          await knex('nxt_tokens').where('id', tokenId).update({
             status: 'reported',
             validated_at: validationDate
           });
@@ -373,7 +373,7 @@ class DataGenerator {
           await knex('distribution_channels').where('id', channel.id).increment('counterfeit_reports', 1);
         } else {
           // Valid product scenario
-          await knex('nfc_tokens').where('id', tokenId).update({
+          await knex('nxt_tokens').where('id', tokenId).update({
             status: 'validated',
             validated_at: validationDate,
             validated_location: knex.raw(`ST_SetSRID(ST_MakePoint(?, ?), 4326)`, [
@@ -427,23 +427,23 @@ class DataGenerator {
     endOfDay.setHours(23, 59, 59, 999);
     
     const validations = await knex('supply_chain_events')
-      .join('nfc_tokens', 'supply_chain_events.token_id', 'nfc_tokens.id')
-      .where('nfc_tokens.manufacturer_id', manufacturerId)
+      .join('nxt_tokens', 'supply_chain_events.token_id', 'nxt_tokens.id')
+      .where('nxt_tokens.manufacturer_id', manufacturerId)
       .whereBetween('supply_chain_events.timestamp', [startOfDay, endOfDay])
       .where('supply_chain_events.event_type', 'validation')
       .count('* as count')
       .first();
     
     const uniqueUsers = await knex('supply_chain_events')
-      .join('nfc_tokens', 'supply_chain_events.token_id', 'nfc_tokens.id')
-      .where('nfc_tokens.manufacturer_id', manufacturerId)
+      .join('nxt_tokens', 'supply_chain_events.token_id', 'nxt_tokens.id')
+      .where('nxt_tokens.manufacturer_id', manufacturerId)
       .whereBetween('supply_chain_events.timestamp', [startOfDay, endOfDay])
       .countDistinct('supply_chain_events.stakeholder_id as count')
       .first();
     
     const counterfeits = await knex('counterfeit_reports')
-      .join('nfc_tokens', 'counterfeit_reports.token_id', 'nfc_tokens.id')
-      .where('nfc_tokens.manufacturer_id', manufacturerId)
+      .join('nxt_tokens', 'counterfeit_reports.token_id', 'nxt_tokens.id')
+      .where('nxt_tokens.manufacturer_id', manufacturerId)
       .whereBetween('counterfeit_reports.created_at', [startOfDay, endOfDay])
       .count('* as count')
       .first();

@@ -132,7 +132,7 @@
 
 ## Security Features
 
-### NFC Token Security
+### NXT Tag Token Security
 - Cryptographic hash generation
 - One-time use validation
 - Physical destruction detection

@@ -39,9 +39,9 @@ const Scanner = () => {
     }
   }, [])
 
-  const handleNFCScan = async () => {
+  const handleNXTTagScan = async () => {
     if (!('NDEFReader' in window)) {
-      toast.error('NFC is not supported on this device')
+      toast.error('NXT Tag is not supported on this device')
       setShowManualInput(true)
       return
     }
@@ -62,10 +62,10 @@ const Scanner = () => {
         }
       })
 
-      toast.success('NFC scanning started. Hold your phone near the product.')
+      toast.success('NXT Tag scanning started. Hold your phone near the product.')
     } catch (error) {
-      console.error('NFC scan error:', error)
-      toast.error('Failed to start NFC scanning')
+      console.error('NXT Tag scan error:', error)
+      toast.error('Failed to start NXT Tag scanning')
       setShowManualInput(true)
     } finally {
       setIsScanning(false)
@@ -145,11 +145,11 @@ const Scanner = () => {
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Product Scanner</h1>
         <p className="text-gray-600">
-          Tap your phone to the NFC sticker on the product to verify authenticity
+          Tap your phone to the NXT Tag sticker on the product to verify authenticity
         </p>
       </div>
 
-      {/* NFC Scanner */}
+      {/* NXT Tag Scanner */}
       <div className="card mb-6">
         <div className="text-center">
           <div className={`w-32 h-32 mx-auto mb-6 rounded-full border-4 border-dashed border-gray-300 flex items-center justify-center ${isScanning ? 'nfc-pulse border-blue-500' : ''}`}>
@@ -161,11 +161,11 @@ const Scanner = () => {
           </div>
           
           <button
-            onClick={handleNFCScan}
+            onClick={handleNXTTagScan}
             disabled={isScanning}
             className="btn-primary btn-lg mb-4"
           >
-            {isScanning ? 'Scanning...' : 'Start NFC Scan'}
+            {isScanning ? 'Scanning...' : 'Start NXT Tag Scan'}
           </button>
 
           <div className="text-center">
@@ -173,7 +173,7 @@ const Scanner = () => {
               onClick={() => setShowManualInput(!showManualInput)}
               className="text-sm text-gray-500 hover:text-gray-700"
             >
-              Can't use NFC? Enter token manually
+              Can't use NXT Tag? Enter token manually
             </button>
           </div>
         </div>
@@ -240,7 +240,7 @@ const Scanner = () => {
               {scanResult.requiresPhysicalValidation && !scanResult.invalidated && (
                 <div className="bg-warning-50 border border-warning-200 rounded-lg p-4 mb-4">
                   <p className="text-warning-800 text-sm mb-3">
-                    To complete validation, please tear the NFC sticker on the product.
+                    To complete validation, please tear the NXT Tag sticker on the product.
                   </p>
                   <button
                     onClick={handleInvalidateToken}
@@ -292,8 +292,8 @@ const Scanner = () => {
           <strong>How to scan:</strong>
         </p>
         <ol className="text-left max-w-md mx-auto space-y-1">
-          <li>1. Tap "Start NFC Scan"</li>
-          <li>2. Hold your phone close to the NFC sticker</li>
+          <li>1. Tap "Start NXT Tag Scan"</li>
+          <li>2. Hold your phone close to the NXT Tag sticker</li>
           <li>3. Wait for the validation result</li>
           <li>4. If authentic, tear the sticker to complete validation</li>
         </ol>
