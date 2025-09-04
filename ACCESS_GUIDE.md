@@ -9,7 +9,7 @@
 
 ### 📱 Mobile App Features
 - **Home Page**: Product overview and quick actions
-- **Scanner**: NFC token validation interface
+- **Scanner**: NXT Tag token validation interface
 - **Reports**: Counterfeit report tracking
 - **Rewards**: Point system and redemptions
 - **Profile**: User account management
@@ -129,9 +129,9 @@ curl -X POST http://localhost:3001/api/tokens/validate \
 
 ## 📱 Mobile Features
 
-### NFC Scanner
-- **Real NFC**: Works on Android Chrome with NFC-enabled devices
-- **Manual Entry**: Fallback for testing without NFC hardware
+### NXT Tag Scanner
+- **Real NXT Tag**: Works on Android Chrome with NXT Tag-enabled devices
+- **Manual Entry**: Fallback for testing without NXT Tag hardware
 - **Instant Feedback**: Real-time validation results
 - **Counterfeit Detection**: Immediate alerts for duplicate tokens
 
@@ -249,9 +249,9 @@ pg_ctl status
 pg_ctl start
 ```
 
-#### NFC Not Working
+#### NXT Tag Not Working
 - Use manual token entry for testing
-- NFC requires HTTPS in production
+- NXT Tag requires HTTPS in production
 - Only works on Android Chrome currently
 
 #### Build Errors

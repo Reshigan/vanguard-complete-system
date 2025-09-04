@@ -93,7 +93,7 @@ This document outlines the cutting-edge features that make Vanguard the world's 
 ### 1. Progressive Web App
 - **Offline Mode**: Cache-first architecture
 - **Push Notifications**: Real-time alerts
-- **Camera Integration**: Direct NFC/QR scanning
+- **Camera Integration**: Direct NXT Tag/QR scanning
 - **Biometric Authentication**: Fingerprint/Face ID
 
 ### 2. AR Features (Planned)

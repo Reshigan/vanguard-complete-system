@@ -146,7 +146,7 @@ const generateProducts = () => {
   return products;
 };
 
-// Generate NFC tokens for products
+// Generate NXT Tag tokens for products
 const generateTokens = (products) => {
   const tokens = [];
   const statuses = ['active', 'validated', 'invalidated'];

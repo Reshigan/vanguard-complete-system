@@ -60,7 +60,7 @@ class ManufacturerAnalyticsController {
       const channels = await knex('distribution_channels as dc')
         .leftJoin(
           knex('supply_chain_events as sce')
-            .join('nfc_tokens as nt', 'sce.token_id', 'nt.id')
+            .join('nxt_tokens as nt', 'sce.token_id', 'nt.id')
             .where('nt.manufacturer_id', manufacturerId)
             .whereBetween('sce.timestamp', [startDate, endDate])
             .select('sce.metadata')
@@ -235,14 +235,14 @@ class ManufacturerAnalyticsController {
     try {
       // Get supply chain events
       const events = await knex('supply_chain_events as sce')
-        .join('nfc_tokens as nt', 'sce.token_id', 'nt.id')
+        .join('nxt_tokens as nt', 'sce.token_id', 'nt.id')
         .where('nt.manufacturer_id', manufacturerId)
         .whereBetween('sce.timestamp', [startDate, endDate])
         .select('sce.*', 'nt.batch_number', 'nt.product_id');
       
       // Calculate key metrics
       const metrics = {
-        total_products_tracked: await knex('nfc_tokens')
+        total_products_tracked: await knex('nxt_tokens')
           .where('manufacturer_id', manufacturerId)
           .countDistinct('id as count')
           .first()
@@ -337,8 +337,8 @@ class ManufacturerAnalyticsController {
       
       // Check for counterfeit spikes
       const recentCounterfeits = await knex('counterfeit_reports')
-        .join('nfc_tokens', 'counterfeit_reports.token_id', 'nfc_tokens.id')
-        .where('nfc_tokens.manufacturer_id', manufacturerId)
+        .join('nxt_tokens', 'counterfeit_reports.token_id', 'nxt_tokens.id')
+        .where('nxt_tokens.manufacturer_id', manufacturerId)
         .where('counterfeit_reports.created_at', '>', knex.raw("NOW() - INTERVAL '24 hours'"))
         .count('* as count')
         .first();
@@ -402,21 +402,21 @@ class ManufacturerAnalyticsController {
       ] = await Promise.all([
         knex('products').where('manufacturer_id', manufacturerId).count('* as count').first(),
         knex('supply_chain_events')
-          .join('nfc_tokens', 'supply_chain_events.token_id', 'nfc_tokens.id')
-          .where('nfc_tokens.manufacturer_id', manufacturerId)
+          .join('nxt_tokens', 'supply_chain_events.token_id', 'nxt_tokens.id')
+          .where('nxt_tokens.manufacturer_id', manufacturerId)
           .where('supply_chain_events.event_type', 'validation')
           .whereBetween('supply_chain_events.timestamp', [startDate, endDate])
           .count('* as count')
           .first(),
         knex('counterfeit_reports')
-          .join('nfc_tokens', 'counterfeit_reports.token_id', 'nfc_tokens.id')
-          .where('nfc_tokens.manufacturer_id', manufacturerId)
+          .join('nxt_tokens', 'counterfeit_reports.token_id', 'nxt_tokens.id')
+          .where('nxt_tokens.manufacturer_id', manufacturerId)
           .whereBetween('counterfeit_reports.created_at', [startDate, endDate])
           .count('* as count')
           .first(),
         knex('supply_chain_events')
-          .join('nfc_tokens', 'supply_chain_events.token_id', 'nfc_tokens.id')
-          .where('nfc_tokens.manufacturer_id', manufacturerId)
+          .join('nxt_tokens', 'supply_chain_events.token_id', 'nxt_tokens.id')
+          .where('nxt_tokens.manufacturer_id', manufacturerId)
           .whereBetween('supply_chain_events.timestamp', [startDate, endDate])
           .countDistinct('supply_chain_events.stakeholder_id as count')
           .first(),
@@ -617,8 +617,8 @@ class ManufacturerAnalyticsController {
   async getChannelTrends(manufacturerId, startDate, endDate) {
     // Get daily channel performance
     const dailyData = await knex('supply_chain_events')
-      .join('nfc_tokens', 'supply_chain_events.token_id', 'nfc_tokens.id')
-      .where('nfc_tokens.manufacturer_id', manufacturerId)
+      .join('nxt_tokens', 'supply_chain_events.token_id', 'nxt_tokens.id')
+      .where('nxt_tokens.manufacturer_id', manufacturerId)
       .whereBetween('supply_chain_events.timestamp', [startDate, endDate])
       .select(
         knex.raw('DATE(supply_chain_events.timestamp) as date'),
@@ -759,7 +759,7 @@ class ManufacturerAnalyticsController {
   }
 
   async analyzeBatchPerformance(manufacturerId, startDate, endDate) {
-    const batchData = await knex('nfc_tokens')
+    const batchData = await knex('nxt_tokens')
       .where('manufacturer_id', manufacturerId)
       .whereBetween('created_at', [startDate, endDate])
       .select('batch_number')
@@ -1020,9 +1020,9 @@ class ManufacturerAnalyticsController {
   async calculateEstimatedRevenue(manufacturerId, startDate, endDate) {
     // Simplified revenue calculation based on validations
     const validations = await knex('supply_chain_events')
-      .join('nfc_tokens', 'supply_chain_events.token_id', 'nfc_tokens.id')
-      .join('products', 'nfc_tokens.product_id', 'products.id')
-      .where('nfc_tokens.manufacturer_id', manufacturerId)
+      .join('nxt_tokens', 'supply_chain_events.token_id', 'nxt_tokens.id')
+      .join('products', 'nxt_tokens.product_id', 'products.id')
+      .where('nxt_tokens.manufacturer_id', manufacturerId)
       .where('supply_chain_events.event_type', 'validation')
       .whereBetween('supply_chain_events.timestamp', [startDate, endDate])
       .count('* as count')

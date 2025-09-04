@@ -18,7 +18,7 @@ const Home = () => {
     {
       icon: Scan,
       title: 'Instant Verification',
-      description: 'Tap your phone to any NFC-enabled product to verify authenticity instantly.',
+      description: 'Tap your phone to any NXT Tag-enabled product to verify authenticity instantly.',
       color: 'text-blue-600'
     },
     {
@@ -60,7 +60,7 @@ const Home = () => {
         </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
           Your trusted partner in product authentication. Protect yourself and others 
-          from counterfeit products with our advanced NFC verification system.
+          from counterfeit products with our advanced NXT Tag verification system.
         </p>
         
         {isAuthenticated ? (

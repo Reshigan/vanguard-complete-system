@@ -262,8 +262,8 @@ router.get('/offers', auth, async (req, res) => {
     
     // Get user's favorite products/categories
     const favoriteProducts = await knex('supply_chain_events')
-      .join('nfc_tokens', 'supply_chain_events.token_id', 'nfc_tokens.id')
-      .join('products', 'nfc_tokens.product_id', 'products.id')
+      .join('nxt_tokens', 'supply_chain_events.token_id', 'nxt_tokens.id')
+      .join('products', 'nxt_tokens.product_id', 'products.id')
       .where('supply_chain_events.stakeholder_id', userId)
       .select('products.category')
       .groupBy('products.category')

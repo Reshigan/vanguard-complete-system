@@ -7,15 +7,15 @@ This guide demonstrates the complete Vanguard Anti-Counterfeiting System workflo
 ## Demo Scenario: Mark's Experience
 
 ### Background
-Mark is at a local liquor store and wants to buy a bottle of **Vanguard Reserve**, a limited-edition whisky. The bottle looks authentic with correct labeling and an NFC sticker on the neck.
+Mark is at a local liquor store and wants to buy a bottle of **Vanguard Reserve**, a limited-edition whisky. The bottle looks authentic with correct labeling and an NXT Tag sticker on the neck.
 
 ### Step-by-Step Demo
 
 #### 1. Initial Product Scan
-**Mark opens the Vanguard mobile app and scans the NFC sticker**
+**Mark opens the Vanguard mobile app and scans the NXT Tag sticker**
 
 ```
-🔍 Scanning NFC Token...
+🔍 Scanning NXT Tag Token...
 Token Hash: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
 ```
 
@@ -23,7 +23,7 @@ Token Hash: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
 ```json
 {
   "success": true,
-  "message": "Token is authentic. Please tear the NFC sticker to complete validation.",
+  "message": "Token is authentic. Please tear the NXT Tag sticker to complete validation.",
   "token": {
     "productName": "Vanguard Reserve",
     "manufacturer": "Vanguard Distillery",
@@ -39,7 +39,7 @@ Token Hash: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
 ```
 
 #### 2. Physical Validation Attempt
-**Mark tears the NFC sticker to complete validation**
+**Mark tears the NXT Tag sticker to complete validation**
 
 **Expected Result (Counterfeit Detection):**
 ```json
@@ -96,7 +96,7 @@ immediately to earn your rewards.
 - **30+ Products** across various categories
 - **100+ Consumer Users** with reward balances
 - **20 Distributor Users** for supply chain testing
-- **1000+ NFC Tokens** with various statuses
+- **1000+ NXT Tag Tokens** with various statuses
 - **Counterfeit Reports** with different statuses
 
 ## API Testing Endpoints
@@ -166,7 +166,7 @@ curl -X POST http://localhost:3001/api/reports/counterfeit \
 - Statistics display
 
 ### 2. Scanner Page
-- NFC scanning interface
+- NXT Tag scanning interface
 - Manual token entry option
 - Real-time validation feedback
 - Counterfeit detection alerts
@@ -250,8 +250,8 @@ curl -X POST http://localhost:3001/api/reports/counterfeit \
 
 ### Common Issues
 
-#### 1. NFC Not Working
-- **Cause**: Browser doesn't support Web NFC API
+#### 1. NXT Tag Not Working
+- **Cause**: Browser doesn't support Web NXT Tag API
 - **Solution**: Use manual token entry or test on Android Chrome
 
 #### 2. Database Connection Error
@@ -285,13 +285,13 @@ curl http://localhost:3001/health
 ## Demo Script for Presentations
 
 ### Introduction (2 minutes)
-"Today I'll demonstrate Vanguard, a comprehensive anti-counterfeiting system that protects consumers and brands using NFC technology and blockchain verification."
+"Today I'll demonstrate Vanguard, a comprehensive anti-counterfeiting system that protects consumers and brands using NXT Tag technology and blockchain verification."
 
 ### Problem Statement (1 minute)
 "Counterfeit products cost the global economy $500 billion annually. Traditional authentication methods are easily replicated, leaving consumers vulnerable."
 
 ### Solution Overview (2 minutes)
-"Vanguard uses NFC stickers with unique cryptographic tokens, blockchain verification, and a one-time physical validation process that makes counterfeiting virtually impossible."
+"Vanguard uses NXT Tag stickers with unique cryptographic tokens, blockchain verification, and a one-time physical validation process that makes counterfeiting virtually impossible."
 
 ### Live Demo (10 minutes)
 1. **Show authentic product scan** (2 min)

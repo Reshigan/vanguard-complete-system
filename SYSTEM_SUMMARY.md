@@ -2,7 +2,7 @@
 
 ## 🎯 Project Overview
 
-The Vanguard Anti-Counterfeiting System is a comprehensive, production-ready solution designed to combat counterfeit products globally using NFC technology and blockchain integration. The system has been fully implemented with all requested features and enhancements.
+The Vanguard Anti-Counterfeiting System is a comprehensive, production-ready solution designed to combat counterfeit products globally using NXT Tag technology and blockchain integration. The system has been fully implemented with all requested features and enhancements.
 
 ## ✅ Completed Components
 
@@ -16,7 +16,7 @@ The Vanguard Anti-Counterfeiting System is a comprehensive, production-ready sol
 ### 2. Backend API Implementation ✅
 - **Express.js Server**: Modular architecture with proper middleware
 - **Authentication System**: JWT with refresh tokens, role-based access control
-- **Token Validation Service**: NFC token validation with blockchain verification
+- **Token Validation Service**: NXT Tag token validation with blockchain verification
 - **Counterfeit Reporting**: Automated detection and reporting system
 - **Rewards System**: Point-based incentive system for users
 - **Supply Chain Tracking**: Complete product journey monitoring
@@ -26,7 +26,7 @@ The Vanguard Anti-Counterfeiting System is a comprehensive, production-ready sol
 ### 3. Frontend Mobile Application ✅
 - **Progressive Web App (PWA)**: Offline capabilities, installable
 - **Responsive Design**: Mobile-first approach with Tailwind CSS
-- **NFC Scanner Interface**: Intuitive scanning with manual fallback
+- **NXT Tag Scanner Interface**: Intuitive scanning with manual fallback
 - **User Authentication**: Login/register with form validation
 - **Product Validation**: Real-time feedback and counterfeit detection
 - **Rewards System**: Point tracking and redemption interface
@@ -46,7 +46,7 @@ The Vanguard Anti-Counterfeiting System is a comprehensive, production-ready sol
 - **8 Global Manufacturers**: Representing different countries and industries
 - **30+ Products**: Various categories including spirits, wine, premium goods
 - **100+ Test Users**: Consumers, distributors, manufacturers with realistic profiles
-- **1000+ NFC Tokens**: Various statuses and validation states
+- **1000+ NXT Tag Tokens**: Various statuses and validation states
 - **Counterfeit Reports**: Different statuses and investigation stages
 - **Supply Chain Events**: Complete product journey tracking
 - **Vanguard Reserve Scenario**: Specific test case for counterfeit detection
@@ -63,7 +63,7 @@ The Vanguard Anti-Counterfeiting System is a comprehensive, production-ready sol
 ## 🚀 Key Features Implemented
 
 ### Core Security Features
-- **Unique NFC Tokens**: Cryptographically secure, one-time use
+- **Unique NXT Tag Tokens**: Cryptographically secure, one-time use
 - **Blockchain Verification**: Immutable record keeping
 - **Physical Validation**: Sticker destruction prevents reuse
 - **Real-time Detection**: Immediate counterfeit alerts
@@ -91,7 +91,7 @@ The Vanguard Anti-Counterfeiting System is a comprehensive, production-ready sol
 The system includes a complete test scenario featuring **Vanguard Reserve**, a limited-edition whisky that demonstrates the counterfeit detection process when a token has been previously validated.
 
 ### Test Flow
-1. **Product Scan**: Consumer scans NFC sticker
+1. **Product Scan**: Consumer scans NXT Tag sticker
 2. **Initial Validation**: System confirms token authenticity
 3. **Physical Validation**: Consumer tears sticker
 4. **Counterfeit Detection**: System detects duplicate validation
@@ -134,7 +134,7 @@ client/
 │   ├── components/         # Reusable UI components
 │   ├── pages/              # Application pages
 │   │   ├── Home.jsx        # Landing page
-│   │   ├── Scanner.jsx     # NFC scanning interface
+│   │   ├── Scanner.jsx     # NXT Tag scanning interface
 │   │   ├── Login.jsx       # User authentication
 │   │   ├── Register.jsx    # User registration
 │   │   ├── Reports.jsx     # Report management

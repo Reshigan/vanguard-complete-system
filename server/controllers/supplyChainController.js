@@ -225,7 +225,7 @@ const supplyChainController = {
           event_type: 'manufactured',
           location: 'Factory Floor A',
           timestamp: token.created_at,
-          notes: 'Product manufactured and NFC tag attached'
+          notes: 'Product manufactured and NXT Tag tag attached'
         },
         {
           id: 2,

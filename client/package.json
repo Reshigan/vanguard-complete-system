@@ -27,7 +27,8 @@
     "recharts": "^2.8.0",
     "date-fns": "^2.30.0",
     "@headlessui/react": "^1.7.17",
-    "react-hot-toast": "^2.4.1"
+    "chart.js": "^4.4.0",
+    "react-chartjs-2": "^5.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

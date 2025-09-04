@@ -82,7 +82,7 @@ open http://localhost:3001
 
 ### 👥 For Consumers
 
-- **Product Verification**: Instant authenticity checking via QR/NFC
+- **Product Verification**: Instant authenticity checking via QR/NXT Tag
 - **Rewards Program**: Earn points for verifications and reports
 - **AI Assistant**: Interactive chatbot for product information
 - **History Tracking**: Personal verification and reward history

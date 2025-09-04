@@ -76,17 +76,17 @@ VALUES
 -- Insert tokens
 INSERT INTO tokens (id, product_id, token_hash, nfc_id, status, batch_id, serial_number)
 VALUES 
-    ('00000000-0000-0000-0000-000000000401', '00000000-0000-0000-0000-000000000301', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6', 'NFC-JW-BL-001', 'active', 'JW-2023-001', 'SN-00001'),
-    ('00000000-0000-0000-0000-000000000402', '00000000-0000-0000-0000-000000000301', 'b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1', 'NFC-JW-BL-002', 'active', 'JW-2023-001', 'SN-00002'),
-    ('00000000-0000-0000-0000-000000000403', '00000000-0000-0000-0000-000000000302', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2', 'NFC-JW-BK-001', 'active', 'JW-2023-002', 'SN-00003'),
-    ('00000000-0000-0000-0000-000000000404', '00000000-0000-0000-0000-000000000302', 'd4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3', 'NFC-JW-BK-002', 'validated', 'JW-2023-002', 'SN-00004'),
-    ('00000000-0000-0000-0000-000000000405', '00000000-0000-0000-0000-000000000303', 'e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4', 'NFC-JD-07-001', 'active', 'JD-2023-001', 'SN-00005'),
-    ('00000000-0000-0000-0000-000000000406', '00000000-0000-0000-0000-000000000304', 'f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5', 'NFC-JD-SB-001', 'active', 'JD-2023-002', 'SN-00006'),
-    ('00000000-0000-0000-0000-000000000407', '00000000-0000-0000-0000-000000000305', 'g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6', 'NFC-JB-OR-001', 'active', 'JB-2023-001', 'SN-00007'),
-    ('00000000-0000-0000-0000-000000000408', '00000000-0000-0000-0000-000000000306', 'h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6g7', 'NFC-HN-XO-001', 'active', 'HN-2023-001', 'SN-00008'),
-    ('00000000-0000-0000-0000-000000000409', '00000000-0000-0000-0000-000000000307', 'i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6g7h8', 'NFC-HN-VSOP-001', 'active', 'HN-2023-002', 'SN-00009'),
-    ('00000000-0000-0000-0000-000000000410', '00000000-0000-0000-0000-000000000308', 'j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6g7h8i9', 'NFC-GG-OR-001', 'active', 'GG-2023-001', 'SN-00010'),
-    ('00000000-0000-0000-0000-000000000411', '00000000-0000-0000-0000-000000000309', 'k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6g7h8i9j0', 'NFC-GG-LP-001', 'reported', 'GG-2023-002', 'SN-00011');
+    ('00000000-0000-0000-0000-000000000401', '00000000-0000-0000-0000-000000000301', 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6', 'NXT Tag-JW-BL-001', 'active', 'JW-2023-001', 'SN-00001'),
+    ('00000000-0000-0000-0000-000000000402', '00000000-0000-0000-0000-000000000301', 'b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1', 'NXT Tag-JW-BL-002', 'active', 'JW-2023-001', 'SN-00002'),
+    ('00000000-0000-0000-0000-000000000403', '00000000-0000-0000-0000-000000000302', 'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2', 'NXT Tag-JW-BK-001', 'active', 'JW-2023-002', 'SN-00003'),
+    ('00000000-0000-0000-0000-000000000404', '00000000-0000-0000-0000-000000000302', 'd4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3', 'NXT Tag-JW-BK-002', 'validated', 'JW-2023-002', 'SN-00004'),
+    ('00000000-0000-0000-0000-000000000405', '00000000-0000-0000-0000-000000000303', 'e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4', 'NXT Tag-JD-07-001', 'active', 'JD-2023-001', 'SN-00005'),
+    ('00000000-0000-0000-0000-000000000406', '00000000-0000-0000-0000-000000000304', 'f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5', 'NXT Tag-JD-SB-001', 'active', 'JD-2023-002', 'SN-00006'),
+    ('00000000-0000-0000-0000-000000000407', '00000000-0000-0000-0000-000000000305', 'g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6', 'NXT Tag-JB-OR-001', 'active', 'JB-2023-001', 'SN-00007'),
+    ('00000000-0000-0000-0000-000000000408', '00000000-0000-0000-0000-000000000306', 'h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6g7', 'NXT Tag-HN-XO-001', 'active', 'HN-2023-001', 'SN-00008'),
+    ('00000000-0000-0000-0000-000000000409', '00000000-0000-0000-0000-000000000307', 'i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6g7h8', 'NXT Tag-HN-VSOP-001', 'active', 'HN-2023-002', 'SN-00009'),
+    ('00000000-0000-0000-0000-000000000410', '00000000-0000-0000-0000-000000000308', 'j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6g7h8i9', 'NXT Tag-GG-OR-001', 'active', 'GG-2023-001', 'SN-00010'),
+    ('00000000-0000-0000-0000-000000000411', '00000000-0000-0000-0000-000000000309', 'k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a1b2c3d4e5f6g7h8i9j0', 'NXT Tag-GG-LP-001', 'reported', 'GG-2023-002', 'SN-00011');
 
 -- Insert token validations
 INSERT INTO token_validations (id, token_id, user_id, validation_time, location_latitude, location_longitude, is_authentic, validation_method)
@@ -97,7 +97,7 @@ VALUES
 -- Insert counterfeit reports
 INSERT INTO counterfeit_reports (id, token_id, reporter_id, report_time, location_latitude, location_longitude, store_name, description, status)
 VALUES 
-    ('00000000-0000-0000-0000-000000000601', '00000000-0000-0000-0000-000000000411', '00000000-0000-0000-0000-000000000012', '2023-08-20 16:50:00', 34.0522, -118.2437, 'Downtown Liquor Store', 'Purchased a bottle of Grey Goose La Poire but the NFC tag showed it was already validated. Suspicious packaging quality.', 'investigating');
+    ('00000000-0000-0000-0000-000000000601', '00000000-0000-0000-0000-000000000411', '00000000-0000-0000-0000-000000000012', '2023-08-20 16:50:00', 34.0522, -118.2437, 'Downtown Liquor Store', 'Purchased a bottle of Grey Goose La Poire but the NXT Tag tag showed it was already validated. Suspicious packaging quality.', 'investigating');
 
 -- Insert rewards for consumers
 INSERT INTO rewards (id, user_id, points, level, lifetime_points)
@@ -167,7 +167,7 @@ VALUES
 INSERT INTO ai_chat_messages (id, user_id, session_id, message, is_user)
 VALUES 
     ('00000000-0000-0000-0000-000000001401', '00000000-0000-0000-0000-000000000012', '00000000-0000-0000-0000-000000001501', 'How can I tell if a product is counterfeit?', TRUE),
-    ('00000000-0000-0000-0000-000000001402', '00000000-0000-0000-0000-000000000012', '00000000-0000-0000-0000-000000001501', 'There are several ways to identify counterfeit products. First, always check the NFC tag with the Verifi AI app. Authentic products will have a valid, unbroken NFC seal. Look for quality issues like poor printing, spelling errors, or inconsistent packaging. If the price seems too good to be true, it might be counterfeit. Always purchase from authorized retailers. Would you like more specific guidance for a particular product?', FALSE),
+    ('00000000-0000-0000-0000-000000001402', '00000000-0000-0000-0000-000000000012', '00000000-0000-0000-0000-000000001501', 'There are several ways to identify counterfeit products. First, always check the NXT Tag tag with the Verifi AI app. Authentic products will have a valid, unbroken NXT Tag seal. Look for quality issues like poor printing, spelling errors, or inconsistent packaging. If the price seems too good to be true, it might be counterfeit. Always purchase from authorized retailers. Would you like more specific guidance for a particular product?', FALSE),
     ('00000000-0000-0000-0000-000000001403', '00000000-0000-0000-0000-000000000012', '00000000-0000-0000-0000-000000001501', 'What should I do if I find a counterfeit product?', TRUE),
     ('00000000-0000-0000-0000-000000001404', '00000000-0000-0000-0000-000000000012', '00000000-0000-0000-0000-000000001501', 'If you believe you''ve found a counterfeit product, please report it immediately through the Verifi AI app. Take photos of the product, packaging, and any security features. Note the location where you purchased it. Your report helps protect other consumers and allows manufacturers to investigate. You''ll earn reward points for verified counterfeit reports, and you''re helping to combat illegal trade. Would you like me to guide you through the reporting process?', FALSE);
 

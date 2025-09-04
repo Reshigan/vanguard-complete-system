@@ -15,7 +15,7 @@ exports.seed = async function(knex) {
   await knex('counterfeit_reports').del();
   await knex('supply_chain_events').del();
   await knex('refresh_tokens').del();
-  await knex('nfc_tokens').del();
+  await knex('nxt_tokens').del();
   await knex('products').del();
   await knex('users').del();
   await knex('manufacturers').del();
@@ -41,10 +41,10 @@ exports.seed = async function(knex) {
   await knex('users').insert(users);
   console.log(`✅ Inserted ${users.length} users`);
 
-  // Generate and insert NFC tokens
+  // Generate and insert NXT Tag tokens
   const tokens = generateTokens(products);
-  await knex('nfc_tokens').insert(tokens);
-  console.log(`✅ Inserted ${tokens.length} NFC tokens`);
+  await knex('nxt_tokens').insert(tokens);
+  console.log(`✅ Inserted ${tokens.length} NXT Tag tokens`);
 
   // Generate and insert supply chain events
   const events = generateSupplyChainEvents(tokens, users);
@@ -64,7 +64,7 @@ exports.seed = async function(knex) {
   console.log('✅ Inserted Vanguard Reserve test product');
 
   // Insert the test tokens
-  await knex('nfc_tokens').insert([scenario.authenticToken, scenario.counterfeitToken]);
+  await knex('nxt_tokens').insert([scenario.authenticToken, scenario.counterfeitToken]);
   console.log('✅ Inserted Vanguard Reserve test tokens');
 
   console.log('\n🎉 Master data seeding completed successfully!');
@@ -72,7 +72,7 @@ exports.seed = async function(knex) {
   console.log(`   • ${manufacturers.length} Global Manufacturers`);
   console.log(`   • ${products.length + 1} Products (including Vanguard Reserve)`);
   console.log(`   • ${users.length} Users (consumers, distributors, manufacturers)`);
-  console.log(`   • ${tokens.length + 2} NFC Tokens (including test scenario)`);
+  console.log(`   • ${tokens.length + 2} NXT Tag Tokens (including test scenario)`);
   console.log(`   • ${events.length} Supply Chain Events`);
   console.log(`   • ${reports.length} Counterfeit Reports`);
   

@@ -1,7 +1,7 @@
 {
   "name": "authentiguard-system",
   "version": "1.0.0",
-  "description": "Global Anti-Counterfeiting System with NFC and Blockchain Integration",
+  "description": "Global Anti-Counterfeiting System with NXT Tag and Blockchain Integration",
   "main": "server/index.js",
   "scripts": {
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",

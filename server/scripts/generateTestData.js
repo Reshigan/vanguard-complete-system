@@ -65,7 +65,7 @@ async function getStatistics() {
     knex('manufacturers').count('* as count').first(),
     knex('products').count('* as count').first(),
     knex('users').count('* as count').first(),
-    knex('nfc_tokens').count('* as count').first(),
+    knex('nxt_tokens').count('* as count').first(),
     knex('supply_chain_events').where('event_type', 'validation').count('* as count').first(),
     knex('counterfeit_reports').count('* as count').first(),
     knex('distribution_channels').count('* as count').first(),

@@ -122,14 +122,14 @@ class AnomalyDetectionService {
   async prepareTrainingData() {
     // Prepare feature vectors from normal behavior patterns
     const normalPatterns = await knex('supply_chain_events')
-      .join('nfc_tokens', 'supply_chain_events.token_id', 'nfc_tokens.id')
+      .join('nxt_tokens', 'supply_chain_events.token_id', 'nxt_tokens.id')
       .join('users', 'supply_chain_events.stakeholder_id', 'users.id')
-      .where('nfc_tokens.status', 'validated')
+      .where('nxt_tokens.status', 'validated')
       .whereNotIn('supply_chain_events.event_type', ['counterfeit_report', 'validation_attempt'])
       .select(
         knex.raw('COUNT(DISTINCT supply_chain_events.token_id) as token_count'),
         knex.raw('COUNT(DISTINCT supply_chain_events.stakeholder_id) as user_count'),
-        knex.raw('AVG(EXTRACT(EPOCH FROM (supply_chain_events.timestamp - nfc_tokens.created_at))) as avg_time_to_validation'),
+        knex.raw('AVG(EXTRACT(EPOCH FROM (supply_chain_events.timestamp - nxt_tokens.created_at))) as avg_time_to_validation'),
         knex.raw('COUNT(CASE WHEN supply_chain_events.event_type = \'validation\' THEN 1 END) as validation_count')
       )
       .groupBy(knex.raw('DATE(supply_chain_events.timestamp)'))
