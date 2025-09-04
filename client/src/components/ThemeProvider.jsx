@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { getThemeByRole } from '../themes';
-import { AuthContext } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 /**
  * Theme provider component that applies the appropriate theme based on user role
@@ -10,7 +10,7 @@ import { AuthContext } from '../contexts/AuthContext';
  * Consumer users get a friendly, engaging theme
  */
 const ThemeProvider = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   
   // Determine the appropriate theme based on user role
   const theme = useMemo(() => {

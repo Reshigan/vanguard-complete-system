@@ -14,9 +14,16 @@ import Profile from './pages/Profile';
 import Register from './pages/Register';
 import ResponsibleDrinking from './pages/ResponsibleDrinking';
 
+// Business pages
+import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
+import Products from './pages/Products';
+import Authentication from './pages/Authentication';
+import BusinessReports from './pages/BusinessReports';
+import Settings from './pages/Settings';
+
 // New business UI components
 import BusinessLayout from './components/business/BusinessLayout';
-import Dashboard from './components/business/Dashboard';
 
 // New consumer UI components
 import ConsumerLayout from './components/consumer/ConsumerLayout';
@@ -25,6 +32,9 @@ import ScanPage from './components/consumer/ScanPage';
 
 // Auth components
 import Login from './components/auth/Login';
+
+// AI Chatbot
+import AIChatbot from './components/AIChatbot';
 
 function App() {
   const { user, loading, hasRole } = useAuth();
@@ -42,6 +52,9 @@ function App() {
 
   return (
     <ThemeProvider>
+      {/* AI Chatbot - Available on all pages when user is logged in */}
+      {user && <AIChatbot />}
+      
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
@@ -57,27 +70,27 @@ function App() {
             } />
             <Route path="/analytics" element={
               <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
-                <Dashboard />
+                <Analytics />
               </ProtectedRoute>
             } />
             <Route path="/products" element={
               <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
-                <Dashboard />
+                <Products />
               </ProtectedRoute>
             } />
             <Route path="/authentication" element={
               <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
-                <Dashboard />
+                <Authentication />
               </ProtectedRoute>
             } />
             <Route path="/reports" element={
               <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
-                <Dashboard />
+                <BusinessReports />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={
               <ProtectedRoute roles={['manufacturer', 'distributor', 'admin']}>
-                <Dashboard />
+                <Settings />
               </ProtectedRoute>
             } />
           </>
