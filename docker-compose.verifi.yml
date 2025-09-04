@@ -1,0 +1,152 @@
+version: '3.8'
+
+services:
+  # Verifi Client Application
+  verifi-client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "${CLIENT_PORT:-52690}:3000"
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=http://localhost:${SERVER_PORT:-55222}
+      - REACT_APP_VERIFI_API_URL=http://localhost:${SERVER_PORT:-55222}/api/verifi
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+    depends_on:
+      - verifi-server
+    networks:
+      - verifi-network
+    restart: unless-stopped
+
+  # Verifi Server Application
+  verifi-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "${SERVER_PORT:-55222}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://verifi_user:verifi_pass@verifi-db:5432/verifi_db
+      - REDIS_URL=redis://verifi-redis:6379
+      - JWT_SECRET=verifi-jwt-secret-2024
+      - VERIFI_API_KEY=verifi-demo-key-2024
+      - BLOCKCHAIN_RPC_URL=http://verifi-blockchain:8545
+      - AI_SERVICE_URL=http://verifi-ai:5000
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      - verifi-db
+      - verifi-redis
+    networks:
+      - verifi-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL Database
+  verifi-db:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_DB=verifi_db
+      - POSTGRES_USER=verifi_user
+      - POSTGRES_PASSWORD=verifi_pass
+    volumes:
+      - verifi_db_data:/var/lib/postgresql/data
+      - ./server/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - verifi-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U verifi_user -d verifi_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache
+  verifi-redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - verifi_redis_data:/data
+    networks:
+      - verifi-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Blockchain Node (Ganache for development)
+  verifi-blockchain:
+    image: trufflesuite/ganache:latest
+    ports:
+      - "8545:8545"
+    command: >
+      ganache
+      --host 0.0.0.0
+      --port 8545
+      --networkId 1337
+      --accounts 10
+      --deterministic
+      --mnemonic "verifi blockchain development test mnemonic seed phrase"
+    networks:
+      - verifi-network
+    restart: unless-stopped
+
+  # AI/ML Service
+  verifi-ai:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.worker
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://verifi_user:verifi_pass@verifi-db:5432/verifi_db
+      - REDIS_URL=redis://verifi-redis:6379
+    volumes:
+      - ./server/services/ai:/app/ai
+      - ./server/services/ml:/app/ml
+    depends_on:
+      - verifi-db
+      - verifi-redis
+    networks:
+      - verifi-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  verifi-nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - verifi-client
+      - verifi-server
+    networks:
+      - verifi-network
+    restart: unless-stopped
+
+volumes:
+  verifi_db_data:
+    driver: local
+  verifi_redis_data:
+    driver: local
+
+networks:
+  verifi-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

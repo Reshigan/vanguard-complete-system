@@ -90,6 +90,32 @@ try {
   logger.warn('Health routes not available: ' + err.message);
 }
 
+try {
+  // Load Verifi routes
+  const verifiRoutes = require('./routes/verifi');
+  app.use('/api/verifi', verifiRoutes);
+  logger.info('Verifi routes loaded successfully');
+} catch (err) {
+  logger.warn('Verifi routes not available: ' + err.message);
+}
+
+try {
+  // Load existing routes if available
+  const authRoutes = require('./routes/auth');
+  const tokenRoutes = require('./routes/tokens');
+  const rewardsRoutes = require('./routes/rewards');
+  const analyticsRoutes = require('./routes/analytics');
+  
+  app.use('/api/auth', authRoutes);
+  app.use('/api/tokens', tokenRoutes);
+  app.use('/api/rewards', rewardsRoutes);
+  app.use('/api/analytics', analyticsRoutes);
+  
+  logger.info('Additional routes loaded successfully');
+} catch (err) {
+  logger.warn('Some additional routes not available: ' + err.message);
+}
+
 // API placeholder routes for Docker testing
 app.get('/api/status', (req, res) => {
   res.json({

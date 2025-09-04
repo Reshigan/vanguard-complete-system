@@ -36,6 +36,11 @@ import Login from './components/auth/Login';
 // AI Chatbot
 import AIChatbot from './components/AIChatbot';
 
+// Verifi Applications
+import VerifiGuard from './pages/verifi/VerifiGuard';
+import VerifiEnterprise from './pages/verifi/VerifiEnterprise';
+import VerifiIntelligence from './pages/verifi/VerifiIntelligence';
+
 function App() {
   const { user, loading, hasRole } = useAuth();
 
@@ -59,6 +64,19 @@ function App() {
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
+        {/* Verifi Applications */}
+        <Route path="/verifi/guard" element={<VerifiGuard />} />
+        <Route path="/verifi/enterprise" element={
+          <ProtectedRoute roles={['manufacturer', 'admin']}>
+            <VerifiEnterprise />
+          </ProtectedRoute>
+        } />
+        <Route path="/verifi/intelligence" element={
+          <ProtectedRoute roles={['association', 'admin']}>
+            <VerifiIntelligence />
+          </ProtectedRoute>
+        } />
         
         {/* Business UI routes */}
         {isBusinessUser && (
